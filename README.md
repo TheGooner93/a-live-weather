@@ -1,5 +1,4 @@
 # a-live-weather
-<<<<<<< HEAD
 
 ## Project setup
 ```
@@ -25,4 +24,3 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 =======
 Animated live weather app
->>>>>>> 9a90f1febacc1ce39c9e195ab2d987e83384ac42
