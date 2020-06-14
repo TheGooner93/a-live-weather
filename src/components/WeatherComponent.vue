@@ -31,8 +31,10 @@ import { getWeather } from "../services/weatherService";
 import InteractiveLocationFooter from "./InteractiveLocationFooter";
 import CanvasComponent from "./CanvasComponent";
 import WeatherInformation from "./WeatherInformation";
+import store from '../store/store'
 
 export default {
+  store,
   name: "WeatherComponent",
   components: {
     Fragment,
@@ -47,7 +49,8 @@ export default {
   }),
   watch: {
     coordinates: function({ lat = "", lng = "" }) {
-      const weatherPromise = getWeather(lat, lng);
+      const unitsSystem = store.state.unitsSystem;
+      const weatherPromise = getWeather(lat, lng, unitsSystem);
 
       weatherPromise
         .then(weather => (this.weather = weather.data))

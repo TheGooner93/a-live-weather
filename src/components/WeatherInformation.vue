@@ -12,8 +12,10 @@
 
 <script>
 import SingleWeatherPropertyBlob from "./SingleWeatherPropertyBlob";
+import store from '../store/store'
 
 export default {
+  store,
   name: "WeatherInformation",
   components: {SingleWeatherPropertyBlob},
   data: function() {

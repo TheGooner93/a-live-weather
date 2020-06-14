@@ -1,7 +1,7 @@
 <template>
   <footer v-on:click.self="onToggleFooter" class="footer">
     <span v-if="!isFooterExpanded">
-      <strong v-on:click.self="onToggleFooter">{{footerText}}</strong>
+      <strong v-on:click.self="onToggleFooter">{{FOOTER_TEXT}}</strong>
     </span>
     <div
       v-bind:class="{'invisibleElement' : !isFooterExpanded, 'closeTextWrapper': isFooterExpanded}"
@@ -13,23 +13,34 @@
       v-bind:class="{'invisibleElement' : !isFooterExpanded, 'locationInputSection': isFooterExpanded}"
     >
       <div class="locationInputWrapper">
-        <input placeholder="Type a city..." v-model="citySearchText" />
+        <input v-bind:placeholder="FOOTER_INPUT_PLACEHOLDER" v-model="citySearchText" />
       </div>
-      <div class="pt-4">or</div>
+      <div
+        v-bind:class="{'pt-1 pressEnterTextWrapper' : true, 'invisibleElement' : !citySearchText}"
+      >{{PRESS_ENTER_TEXT}}</div>
+      <div class="pt-2">or</div>
       <div class="pt-4">
-        <button>Detect Current Location</button>
+        <button>{{DETECT_LOCATION_TEXT}}</button>
       </div>
     </section>
   </footer>
 </template>
 
 <script>
-import { FOOTER_TEXT } from "../resources/texts/texts";
+import {
+  FOOTER_TEXT,
+  PRESS_ENTER_TEXT,
+  DETECT_LOCATION_TEXT,
+  FOOTER_INPUT_PLACEHOLDER
+} from "../resources/texts/texts";
 
 export default {
   name: "InteractiveLocationFooter",
   data: () => ({
-    footerText: FOOTER_TEXT,
+    FOOTER_TEXT,
+    PRESS_ENTER_TEXT,
+    DETECT_LOCATION_TEXT,
+    FOOTER_INPUT_PLACEHOLDER,
     citySearchText: ""
   }),
   props: ["isFooterExpanded"],
@@ -90,6 +101,15 @@ export default {
   border-bottom: 1px lightgray solid;
 }
 
+.pressEnterTextWrapper {
+  text-align: left;
+  font-size: 1rem;
+  opacity: 1;
+  padding: 1px 2px;
+  height : 2rem;
+  transition: all 0.5s ease;
+}
+
 input {
   outline: none;
   border: none;
@@ -109,8 +129,6 @@ button {
   height: 0;
   width: 0;
   opacity: 0;
-  /* display: none;
-  visibility: hidden; */
   transition: height 0.5s ease;
 }
 </style>
