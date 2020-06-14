@@ -2,21 +2,25 @@
   <div class="weatherContainer">
     <h1>{{weatherAsPerTimePeriodSelected['timezone']}}</h1>
     <h2>{{weatherAsPerTimePeriodSelected['weather'][0]['main']}}</h2>
-    <div>
-        
+    <div class="propertyContainer">
+      <SingleWeatherPropertyBlob iconSrc="fas fa-thermometer-three-quarters" v-bind:propertyValue="temperature" />
+      <SingleWeatherPropertyBlob iconSrc="fas fa-dewpoint" v-bind:propertyValue="humidity" />
+      <SingleWeatherPropertyBlob iconSrc="fas fa-wind" v-bind:propertyValue="windSpeed" />
     </div>
   </div>
 </template>
 
 <script>
+import SingleWeatherPropertyBlob from "./SingleWeatherPropertyBlob";
+
 export default {
   name: "WeatherInformation",
+  components: {SingleWeatherPropertyBlob},
   data: function() {
     return {
       timePeriod: "",
       timePeriodIndex: 1, // showing from the tomorrow onwards
-      weatherAsPerTimePeriodSelected: {},
-      weatherObject: {}
+      weatherAsPerTimePeriodSelected: {}
     };
   },
   props: {
@@ -29,30 +33,36 @@ export default {
     weatherInfo: {
       deep: true,
       handler(weatherInfo) {
-        this.weatherObject = weatherInfo;
         if (this.timePeriod === "current") {
           this.weatherAsPerTimePeriodSelected = {
-            ...this.weatherObject[this.timePeriod],
-            timezone: this.weatherObject["timezone"]
-              .match(/\/.*/)[0]
-              .substring(1)
+            ...weatherInfo[this.timePeriod],
+            timezone: weatherInfo["timezone"].match(/\/.*/)[0].substring(1)
           };
         } else if (this.timePeriod === "daily") {
           this.timePeriodIndex = 1;
 
           this.weatherAsPerTimePeriodSelected = {
-            ...this.weatherObject[this.timePeriod][this.timePeriodIndex],
-            timezone: this.weatherObject["timezone"]
-              .match(/\/.*/)[0]
-              .substring(1)
+            ...weatherInfo[this.timePeriod][this.timePeriodIndex],
+            timezone: weatherInfo["timezone"].match(/\/.*/)[0].substring(1)
           };
         }
       }
+    }
+    // timePeriodIndex: function(index) {
+    //   this.weatherAsPerTimePeriodSelected = this.weatherInfo[this.timePeriod][
+    //     index
+    //   ];
+    // }
+  },
+  computed: {
+    temperature() {
+      return this.weatherAsPerTimePeriodSelected["temp"];
     },
-    timePeriodIndex: function(index) {
-      this.weatherAsPerTimePeriodSelected = this.weatherInfo[this.timePeriod][
-        index
-      ];
+    humidity() {
+      return this.weatherAsPerTimePeriodSelected["humidity"];
+    },
+    windSpeed() {
+      return this.weatherAsPerTimePeriodSelected["wind_speed"];
     }
   },
   created() {
@@ -65,6 +75,14 @@ export default {
   background: white;
   border: 1px solid aqua;
   border-radius: 1rem;
-  padding : 1rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.propertyContainer {
+    padding: 1rem;
+    height : 3rem;
+    display: flex;
 }
 </style>

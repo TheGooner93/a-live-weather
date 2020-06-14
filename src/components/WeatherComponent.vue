@@ -125,4 +125,10 @@ export default {
   cursor: none;
   background: transparent;
 }
+
+@media (max-width: 720px) {
+  .weatherTextWrapper {
+    width: 85%;
+  }
+}
 </style>

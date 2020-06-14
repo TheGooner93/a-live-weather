@@ -1,5 +1,4 @@
 <template>
-  <!-- <footer v-on="{click.self: isFooterExpanded ? '' : onToggleFooter}" class="footer"> -->
   <footer v-on:click.self="onToggleFooter" class="footer">
     <span v-if="!isFooterExpanded">
       <strong v-on:click.self="onToggleFooter">{{footerText}}</strong>
@@ -41,6 +40,7 @@ export default {
       }
     },
     onCloseClick: function() {
+      this.citySearchText = '';
       this.$emit("footerToggle");
     }
   }
