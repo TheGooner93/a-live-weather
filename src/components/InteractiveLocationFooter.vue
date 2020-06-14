@@ -1,20 +1,23 @@
 <template>
-  <footer v-on="{click: isFooterExpanded ? null : onToggleFooter}" class="footer">
-    <span v-if="!isFooterExpanded"><strong>{{footerText}}</strong></span>
+  <!-- <footer v-on="{click.self: isFooterExpanded ? '' : onToggleFooter}" class="footer"> -->
+  <footer v-on:click.self="onToggleFooter" class="footer">
+    <span v-if="!isFooterExpanded">
+      <strong v-on:click.self="onToggleFooter">{{footerText}}</strong>
+    </span>
     <div
-      v-bind:class="{'d-none' : !isFooterExpanded, 'closeTextWrapper': isFooterExpanded}"
+      v-bind:class="{'invisibleElement' : !isFooterExpanded, 'closeTextWrapper': isFooterExpanded}"
       v-on:click="onCloseClick"
     >
       <i class="fas fa-times fa-lg"></i>
     </div>
     <section
-      v-bind:class="{'d-none' : !isFooterExpanded, 'locationInputSection': isFooterExpanded}"
+      v-bind:class="{'invisibleElement' : !isFooterExpanded, 'locationInputSection': isFooterExpanded}"
     >
       <div class="locationInputWrapper">
         <input placeholder="Type a city..." v-model="citySearchText" />
       </div>
-      <div class="pt-3">or</div>
-      <div class="pt-3">
+      <div class="pt-4">or</div>
+      <div class="pt-4">
         <button>Detect Current Location</button>
       </div>
     </section>
@@ -55,12 +58,10 @@ export default {
   box-shadow: 0 -1px 5px gray;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
-  transition: all 0.5s ease-out;
 }
 
 .footer:hover {
   box-shadow: 0 -1px 10px gray;
-  transition: all 0.5s ease-out;
 }
 
 .closeTextWrapper {
@@ -69,6 +70,7 @@ export default {
   top: 0;
   right: 0;
   padding: 1rem;
+  opacity: 1;
   transition: all 0.5s ease-out;
 }
 
@@ -80,9 +82,10 @@ export default {
 
 .locationInputSection {
   width: 75%;
-  height: calc(100vh / 2);
   font-size: 2.5rem;
-  text-align: left;
+  text-align: center;
+  opacity: 1;
+  transition: all 0.5s ease;
 }
 
 .locationInputWrapper {
@@ -93,6 +96,7 @@ input {
   outline: none;
   border: none;
   width: 100%;
+  background: transparent;
 }
 
 button {
@@ -101,5 +105,12 @@ button {
   text-align: left;
   color: white;
   background: black;
+}
+
+.invisibleElement {
+  height: 0;
+  width: 0;
+  opacity: 0;
+  transition: height 0.5s ease;
 }
 </style>

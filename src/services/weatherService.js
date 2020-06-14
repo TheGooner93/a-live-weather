@@ -2,7 +2,7 @@ import axios from "axios";
 import { getWeatherInfoUrl } from '../utility/url';
 
 export const getWeather = (lat = '', lng = '') => {
-    const excludeArray = ['minutely'];
+    const excludeArray = ['minutely', 'hourly'];
     const weatherUrl = getWeatherInfoUrl(lat, lng, excludeArray);
     
     return new Promise((resolve, reject) => {

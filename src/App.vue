@@ -17,7 +17,7 @@ export default {
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Reem-Kufi, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -25,4 +25,10 @@ export default {
   min-height: 100vh;
   position: relative;
 }
+
+@font-face {
+  font-family: 'Reem-Kufi';
+  src: local('Reem-Kufi'), url(./resources/fonts/Reem-Kufi/ReemKufi-Regular.ttf) format('truetype');
+}
+
 </style>
