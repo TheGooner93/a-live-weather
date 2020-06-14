@@ -125,7 +125,7 @@ export default {
       };
     },
     buttonText() {
-      const monthName = getMonthName(new Date(this.weatherAsPerTimePeriodSelected["dt"] * 1000).getMonth() - 1);
+      const monthName = getMonthName(new Date(this.weatherAsPerTimePeriodSelected["dt"] * 1000).getMonth());
 
       return this.timePeriod === "current"
         ? this.NOW_TEXT
