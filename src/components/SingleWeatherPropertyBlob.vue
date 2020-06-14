@@ -2,7 +2,7 @@
   <div class="blobWrapper">
     <i v-bind:class="iconSrc"></i>
     <span class="ml-2 propertyData">{{propertyValue}}</span>
-    <span class=" ml-1 mr-4 propertyData">{{propertyUnit}}</span>
+    <span class=" ml-1 propertyData">{{propertyUnit}}</span>
   </div>
 </template>
 

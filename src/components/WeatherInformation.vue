@@ -116,8 +116,10 @@ export default {
 }
 
 .propertyContainer {
-  padding: 1rem;
-  height: 3rem;
+  padding: 1rem 0 1rem 0 ;
+  min-height: 3rem;
   display: flex;
+  flex-wrap: wrap;
 }
+
 </style>

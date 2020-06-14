@@ -10,7 +10,10 @@
         <div
           v-bind:class="{'weatherTextWrapper' : true, 'weatherTextWrapper-displayed' : !isFooterExpanded, 'weatherTextWrapper-invisible' : isFooterExpanded}"
         >
-          <WeatherInformation v-bind:weatherInfo="weather" v-bind:isWeatherLoading="isWeatherLoading"/>
+          <WeatherInformation
+            v-bind:weatherInfo="weather"
+            v-bind:isWeatherLoading="isWeatherLoading"
+          />
         </div>
       </section>
     </section>
@@ -48,7 +51,7 @@ export default {
     coordinates: {},
     weather: {},
     isFooterExpanded: false,
-    isWeatherLoading: false,
+    isWeatherLoading: false
   }),
   watch: {
     coordinates: function({ lat = "", lng = "" }) {
@@ -107,7 +110,7 @@ export default {
       };
     },
     onGetCurrentLocation() {
-      this.isWeatherLoading = true
+      this.isWeatherLoading = true;
       this.$getLocation().then(coordinates => {
         this.coordinates = coordinates;
         this.isWeatherLoading = false;
@@ -120,7 +123,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .weatherContentSection {
-  min-height: 95vh;
+  min-height: 91vh;
   transition: all 0.5s ease;
 }
 
@@ -166,6 +169,9 @@ export default {
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
   box-shadow: 0 -1px 5px gray;
+  border-color: lightgrey;
+  border-style: solid;
+  border-width: 0px 1px 1px 1px;
 }
 
 .footerSection:hover {
@@ -185,7 +191,7 @@ export default {
 }
 
 .footerCollapsed {
-  min-height: 5vh;
+  min-height: 9vh;
   transition: all 0.5s ease;
 }
 
@@ -194,11 +200,16 @@ export default {
   transition: all 0.5s ease;
   cursor: none;
   background: transparent;
+  padding: 1rem;
 }
 
 @media (max-width: 720px) {
   .weatherTextWrapper {
     width: 85%;
+  }
+
+  .footerExpanded {
+    min-height: 70vh;
   }
 }
 </style>

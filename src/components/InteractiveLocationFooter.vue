@@ -119,9 +119,6 @@ export default {
   justify-content: center;
   align-items: center;
   min-height: inherit;
-  border-color: lightgrey;
-  border-style: solid;
-  border-width: 0px 1px 1px 1px;
 }
 
 .closeTextWrapper {
@@ -147,7 +144,6 @@ export default {
   text-align: center;
   opacity: 1;
   transition: all 0.5s ease;
-  /* visibility: visible; */
 }
 
 .locationInputWrapper {
