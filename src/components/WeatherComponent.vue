@@ -73,6 +73,7 @@ export default {
 <style scoped>
 .weatherContentSection {
   min-height: 95vh;
+  transition: all 0.5s ease;
 }
 
 .canvasSection {
