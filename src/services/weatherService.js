@@ -1,7 +1,7 @@
 import axios from "axios";
-import { getWeatherInfoUrl, getGeocodingUrl } from '../utility/url';
+import { getWeatherInfoUrl, getGeocodingUrl, getLocationInfoUrl } from '../utility/url';
 
-export const getWeather = (lat = '', lng = '', unitsSystem = '') => {
+const getWeather = (lat = '', lng = '', unitsSystem = '') => {
     const excludeArray = ['minutely', 'hourly'];
     const weatherUrl = getWeatherInfoUrl(lat, lng, excludeArray, unitsSystem);
     
@@ -16,6 +16,7 @@ export const getWeather = (lat = '', lng = '', unitsSystem = '') => {
     });
 }
 
+
 export const getGeocodesForLocation = (locationString = '') => {
     const geocodeUrl = getGeocodingUrl(locationString);
     
@@ -28,4 +29,25 @@ export const getGeocodesForLocation = (locationString = '') => {
             reject(err);
         }
     });
+}
+
+const getLocationInfo = (lat = '', lng = '') => {
+    const locationInfoUrl = getLocationInfoUrl(lat,lng);
+    
+    return new Promise((resolve, reject) => {
+        try {
+            const res = axios.get(locationInfoUrl);
+            resolve(res);
+        }
+        catch (err) {
+            reject(err);
+        }
+    });
+}
+
+export const getWeatherAndLocationDetails = async (lat = '', lng = '', unitsSystem = '') => {
+    const weatherPromise = getWeather(lat, lng, unitsSystem);
+    const locationPromise = getLocationInfo(lat, lng);
+
+    return Promise.all([weatherPromise, locationPromise]);
 }

@@ -19,6 +19,8 @@
     >
       <InteractiveLocationFooter
         v-on:footerToggle="toggleFooter"
+        v-on:updateCoordinates="onLocationCoordinatesUpdate"
+        v-on:getCurrentLocation="onGetCurrentLocation"
         v-bind:isFooterExpanded="isFooterExpanded"
       />
     </section>
@@ -27,11 +29,11 @@
 
 <script>
 import { Fragment } from "vue-fragment";
-import { getWeather } from "../services/weatherService";
+import { getWeatherAndLocationDetails } from "../services/weatherService";
 import InteractiveLocationFooter from "./InteractiveLocationFooter";
 import CanvasComponent from "./CanvasComponent";
 import WeatherInformation from "./WeatherInformation";
-import store from '../store/store'
+import store from "../store/store";
 
 export default {
   store,
@@ -50,10 +52,33 @@ export default {
   watch: {
     coordinates: function({ lat = "", lng = "" }) {
       const unitsSystem = store.state.unitsSystem;
-      const weatherPromise = getWeather(lat, lng, unitsSystem);
+      const weatherPromise = getWeatherAndLocationDetails(
+        lat,
+        lng,
+        unitsSystem
+      );
 
       weatherPromise
-        .then(weather => (this.weather = weather.data))
+        .then(weather => {
+          console.log(weather);
+          const {
+            [0]: { data: weatherData = {} },
+            [1]: {
+              data: {
+                address: { country = "", state = "", city = "" }
+              }
+            }
+          } = weather;
+
+          const weatherWithLocationInfo = {
+            ...weatherData,
+            country,
+            state,
+            city
+          };
+
+          this.weather = weatherWithLocationInfo;
+        })
         .catch(err => console.log(err));
     },
     weather: function(weather) {
@@ -62,9 +87,7 @@ export default {
   },
   created() {
     //Get geolocation
-    this.$getLocation().then(coordinates => {
-      this.coordinates = coordinates;
-    });
+    this.onGetCurrentLocation();
   },
   methods: {
     toggleFooter() {
@@ -74,6 +97,17 @@ export default {
       if (this.isFooterExpanded) {
         this.toggleFooter();
       }
+    },
+    onLocationCoordinatesUpdate(lat = "", lng = "") {
+      this.coordinates = {
+        lat,
+        lng
+      };
+    },
+    onGetCurrentLocation() {
+      this.$getLocation().then(coordinates => {
+        this.coordinates = coordinates;
+      });
     }
   }
 };

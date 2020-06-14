@@ -10,9 +10,7 @@
     >
       <i class="fas fa-times fa-lg"></i>
     </div>
-    <div v-if="isLoading">
-      {{LOADING_TEXT}}
-    </div>
+    <div v-if="isLoading">{{LOADING_TEXT}}</div>
     <section
       v-bind:class="{'invisibleElement' : !isFooterExpanded, 'locationInputSection': isFooterExpanded}"
       v-if="!isLoading"
@@ -32,7 +30,7 @@
       >{{UNABLE_TO_FIND_LOCATION_TEXT}}</div>
       <div class="pt-2">or</div>
       <div class="pt-4">
-        <button>{{DETECT_LOCATION_TEXT}}</button>
+        <button v-on:click='onDetectLocationButtonClick'>{{DETECT_LOCATION_TEXT}}</button>
       </div>
     </section>
   </footer>
@@ -45,7 +43,7 @@ import {
   DETECT_LOCATION_TEXT,
   FOOTER_INPUT_PLACEHOLDER,
   UNABLE_TO_FIND_LOCATION_TEXT,
-  LOADING_TEXT,
+  LOADING_TEXT
 } from "../resources/texts/texts";
 
 import { getGeocodesForLocation } from "../services/weatherService";
@@ -67,6 +65,7 @@ export default {
   methods: {
     onToggleFooter: function() {
       if (!this.isFooterExpanded) {
+        this.citySearchText = "";
         this.$emit("footerToggle");
       }
     },
@@ -86,9 +85,15 @@ export default {
         this.isLoading = true;
         const geocodePromise = getGeocodesForLocation(this.citySearchText);
         geocodePromise.then(
-          data => {
+          res => {
             this.isLoading = false;
-            console.log(data);
+            const {
+              data: { [0]: { lat = "", lon = "" } = {} }
+            } = res;
+
+            this.citySearchText = "";
+
+            this.$emit("updateCoordinates", lat, lon);
             this.$emit("footerToggle");
           },
           err => {
@@ -97,6 +102,10 @@ export default {
           }
         );
       }
+    },
+    onDetectLocationButtonClick : function() {
+      this.$emit('getCurrentLocation');
+      this.$emit("footerToggle");
     }
   }
 };

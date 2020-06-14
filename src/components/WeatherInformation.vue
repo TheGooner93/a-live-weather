@@ -1,9 +1,13 @@
 <template>
   <div class="weatherContainer">
-    <h1>{{weatherAsPerTimePeriodSelected['timezone']}}</h1>
-    <h3>{{weatherAsPerTimePeriodSelected['weather'][0]['main']}}</h3>
+    <h1>{{weatherAsPerTimePeriodSelected['city']}}</h1>
+    <h3>{{weatherAsPerTimePeriodSelected['state']? weatherAsPerTimePeriodSelected['state'] + ',' : ''}} {{weatherAsPerTimePeriodSelected['country']}}</h3>
+    <h4>{{weatherAsPerTimePeriodSelected['weather'][0]['main']}}</h4>
     <div class="propertyContainer">
-      <SingleWeatherPropertyBlob iconSrc="fas fa-thermometer-three-quarters" v-bind:propertyValue="temperature" />
+      <SingleWeatherPropertyBlob
+        iconSrc="fas fa-thermometer-three-quarters"
+        v-bind:propertyValue="temperature"
+      />
       <SingleWeatherPropertyBlob iconSrc="fas fa-dewpoint" v-bind:propertyValue="humidity" />
       <SingleWeatherPropertyBlob iconSrc="fas fa-wind" v-bind:propertyValue="windSpeed" />
     </div>
@@ -12,12 +16,12 @@
 
 <script>
 import SingleWeatherPropertyBlob from "./SingleWeatherPropertyBlob";
-import store from '../store/store'
+import store from "../store/store";
 
 export default {
   store,
   name: "WeatherInformation",
-  components: {SingleWeatherPropertyBlob},
+  components: { SingleWeatherPropertyBlob },
   data: function() {
     return {
       timePeriod: "",
@@ -38,14 +42,18 @@ export default {
         if (this.timePeriod === "current") {
           this.weatherAsPerTimePeriodSelected = {
             ...weatherInfo[this.timePeriod],
-            timezone: weatherInfo["timezone"].match(/\/.*/)[0].substring(1)
+            state: weatherInfo["state"],
+            country: weatherInfo["country"],
+            city: weatherInfo["city"]
           };
         } else if (this.timePeriod === "daily") {
           this.timePeriodIndex = 1;
 
           this.weatherAsPerTimePeriodSelected = {
             ...weatherInfo[this.timePeriod][this.timePeriodIndex],
-            timezone: weatherInfo["timezone"].match(/\/.*/)[0].substring(1)
+            state: weatherInfo["state"],
+            country: weatherInfo["country"],
+            city: weatherInfo["city"]
           };
         }
       }
@@ -83,8 +91,8 @@ export default {
 }
 
 .propertyContainer {
-    padding: 1rem;
-    height : 3rem;
-    display: flex;
+  padding: 1rem;
+  height: 3rem;
+  display: flex;
 }
 </style>
