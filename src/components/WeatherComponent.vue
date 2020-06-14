@@ -1,14 +1,15 @@
 <template>
   <Fragment>
-    <section
-      v-bind:class="{'weatherContentSection' : true, 'blurredWeatherContentSection' : isFooterExpanded}"
-      v-on:click="onWeatherContentClick"
-      >
+    <section v-bind:class="{'weatherContentSection' : true}" v-on:click="onWeatherContentClick">
       <section class="canvasSection">
-        <div class="canvasWrapper">
+        <div
+          v-bind:class="{'canvasWrapper' : true, 'blurredFooterExpandedWeatherContentSection' : isFooterExpanded,'blurredFooterCollapsedWeatherContentSection' : !isFooterExpanded}"
+        >
           <CanvasComponent v-bind:weatherInfo="weather" />
         </div>
-        <div v-bind:class="{'weatherTextWrapper' : true, 'd-none' : isFooterExpanded}">
+        <div
+          v-bind:class="{'weatherTextWrapper' : true, 'weatherTextWrapper-displayed' : !isFooterExpanded, 'weatherTextWrapper-invisible' : isFooterExpanded}"
+        >
           <WeatherInformation v-bind:weatherInfo="weather" />
         </div>
       </section>
@@ -67,7 +68,7 @@ export default {
       this.isFooterExpanded = !this.isFooterExpanded;
     },
     onWeatherContentClick() {
-      if(this.isFooterExpanded){
+      if (this.isFooterExpanded) {
         this.toggleFooter();
       }
     }
@@ -94,13 +95,22 @@ export default {
 .canvasWrapper {
   position: absolute;
   z-index: 2;
+  transition: all 0.5s ease;
 }
 
 .weatherTextWrapper {
   position: relative;
   z-index: 4;
   width: 50%;
-  transition: all 0.5s ease;
+  transition: all 0.3s ease;
+}
+
+.weatherTextWrapper-displayed {
+  opacity: 1;
+}
+
+.weatherTextWrapper-invisible {
+  opacity: 0;
 }
 
 .footerSection {
@@ -110,11 +120,23 @@ export default {
   right: 0;
   z-index: 10;
   background: white;
+  overflow: hidden;
+  margin-top: 1px;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  box-shadow: 0 -1px 5px gray;
 }
 
-.blurredWeatherContentSection {
+.footerSection:hover {
+  box-shadow: 0 -1px 10px gray;
+}
+
+.blurredFooterExpandedWeatherContentSection {
   filter: blur(10px);
-  transition: all 0.5s ease;
+}
+
+.blurredFooterCollapsedWeatherContentSection {
+  filter: blur(2px);
 }
 
 .footerSection:hover {

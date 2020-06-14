@@ -3,7 +3,6 @@
 </template>
 
 <script>
-// import { drawTheWeather } from "../resources/canvas/canvas";
 
 export default {
   name: "CanvasComponent",
@@ -17,9 +16,9 @@ export default {
 
     const ctx = canvas.getContext("2d");
 
-    var raindropLength = 70;
-    var raindropCount = 200;
-    var rainAngle = -10;
+    // var raindropLength = 70;
+    // var raindropCount = 200;
+    // var rainAngle = -10;
     // var currentCursor = 0;
     const lightningBoltCount = 50;
     const cloudsCount = 50;
@@ -33,56 +32,56 @@ export default {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
 
-      initRain();
+    //   initRain();
       initLightning();
       initClouds();
     //   initSnow();
     //   initSun();
     });
 
-    class RainDrop {
-      constructor(x, y, draindrop) {
-        this.x = x;
-        this.y = -y;
-        this.dx = draindrop;
-        this.dy = draindrop;
-      }
+    // class RainDrop {
+    //   constructor(x, y, draindrop) {
+    //     this.x = x;
+    //     this.y = -y;
+    //     this.dx = draindrop;
+    //     this.dy = draindrop;
+    //   }
 
-      draw() {
-        const dropBaseLength = 50;
-        const dropCurveRadius = raindropLength / 8;
-        const dropCurveStartAngle = -rainAngle * (Math.PI / 180);
+    //   draw() {
+    //     const dropBaseLength = 50;
+    //     const dropCurveRadius = raindropLength / 8;
+    //     const dropCurveStartAngle = -rainAngle * (Math.PI / 180);
 
-        ctx.beginPath();
-        ctx.arc(
-          this.x - rainAngle,
-          this.y + dropBaseLength,
-          dropCurveRadius,
-          dropCurveStartAngle,
-          dropCurveStartAngle + Math.PI,
-          false
-        );
-        ctx.lineTo(this.x - rainAngle * 3, this.y);
-        ctx.closePath();
+    //     ctx.beginPath();
+    //     ctx.arc(
+    //       this.x - rainAngle,
+    //       this.y + dropBaseLength,
+    //       dropCurveRadius,
+    //       dropCurveStartAngle,
+    //       dropCurveStartAngle + Math.PI,
+    //       false
+    //     );
+    //     ctx.lineTo(this.x - rainAngle * 3, this.y);
+    //     ctx.closePath();
 
-        ctx.fillStyle = "#BFF4F7";
-        ctx.fill();
+    //     ctx.fillStyle = "#BFF4F7";
+    //     ctx.fill();
 
-        ctx.strokeStyle = "#99EDF3";
-        ctx.stroke();
-      }
+    //     ctx.strokeStyle = "#99EDF3";
+    //     ctx.stroke();
+    //   }
 
-      update() {
-        if (this.x - raindropLength > innerWidth || this.y > innerHeight) {
-          this.x = innerWidth - this.x;
-          this.y = -raindropLength;
-        }
-        this.x += this.dx * rainAngle * 0.01;
-        this.y += this.dy;
+    //   update() {
+    //     if (this.x - raindropLength > innerWidth || this.y > innerHeight) {
+    //       this.x = innerWidth - this.x;
+    //       this.y = -raindropLength;
+    //     }
+    //     this.x += this.dx * rainAngle * 0.01;
+    //     this.y += this.dy;
 
-        this.draw();
-      }
-    }
+    //     this.draw();
+    //   }
+    // }
 
     class LightningBolt {
       constructor(x, dy, size) {
@@ -337,17 +336,17 @@ export default {
     var snowflakeArray = [];
     let createdSun;
 
-    function initRain() {
-      raindropArray = [];
-      for (var p = 0; p < raindropCount; p++) {
-        var x = Math.random() * innerWidth;
-        var y = 50;
-        var draindrop = Math.random() * 13; //velocity
-        // var dy = Math.random() * 15; //velocity
-        const createdRaindrop = new RainDrop(x, y, draindrop);
-        raindropArray.push(createdRaindrop);
-      }
-    }
+    // function initRain() {
+    //   raindropArray = [];
+    //   for (var p = 0; p < raindropCount; p++) {
+    //     var x = Math.random() * innerWidth;
+    //     var y = 50;
+    //     var draindrop = Math.random() * 13; //velocity
+    //     // var dy = Math.random() * 15; //velocity
+    //     const createdRaindrop = new RainDrop(x, y, draindrop);
+    //     raindropArray.push(createdRaindrop);
+    //   }
+    // }
 
     function initLightning() {
       lighningBoltArray = [];
@@ -421,7 +420,7 @@ export default {
       }
     }
 
-    initRain();
+    // initRain();
     initLightning();
     initClouds();
     // initSnow();

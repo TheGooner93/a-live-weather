@@ -1,7 +1,7 @@
 <template>
   <div class="weatherContainer">
     <h1>{{weatherAsPerTimePeriodSelected['timezone']}}</h1>
-    <h2>{{weatherAsPerTimePeriodSelected['weather'][0]['main']}}</h2>
+    <h3>{{weatherAsPerTimePeriodSelected['weather'][0]['main']}}</h3>
     <div class="propertyContainer">
       <SingleWeatherPropertyBlob iconSrc="fas fa-thermometer-three-quarters" v-bind:propertyValue="temperature" />
       <SingleWeatherPropertyBlob iconSrc="fas fa-dewpoint" v-bind:propertyValue="humidity" />

@@ -40,7 +40,7 @@ export default {
       }
     },
     onCloseClick: function() {
-      this.citySearchText = '';
+      this.citySearchText = "";
       this.$emit("footerToggle");
     }
   }
@@ -55,23 +55,20 @@ export default {
   justify-content: center;
   align-items: center;
   min-height: inherit;
-  box-shadow: 0 -1px 5px gray;
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
-}
-
-.footer:hover {
-  box-shadow: 0 -1px 10px gray;
+  border-color: lightgrey;
+  border-style: solid;
+  border-width: 0px 1px 1px 1px;
 }
 
 .closeTextWrapper {
   display: block;
+  /* visibility: visible; */
   position: absolute;
   top: 0;
   right: 0;
   padding: 1rem;
   opacity: 1;
-  transition: all 0.5s ease-out;
+  transition: all 0.5s ease;
 }
 
 .closeTextWrapper:hover {
@@ -86,6 +83,7 @@ export default {
   text-align: center;
   opacity: 1;
   transition: all 0.5s ease;
+  /* visibility: visible; */
 }
 
 .locationInputWrapper {
@@ -111,6 +109,8 @@ button {
   height: 0;
   width: 0;
   opacity: 0;
+  /* display: none;
+  visibility: hidden; */
   transition: height 0.5s ease;
 }
 </style>
