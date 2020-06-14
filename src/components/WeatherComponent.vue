@@ -2,7 +2,8 @@
   <Fragment>
     <section
       v-bind:class="{'weatherContentSection' : true, 'blurredWeatherContentSection' : isFooterExpanded}"
-    >
+      v-on:click="onWeatherContentClick"
+      >
       <section class="canvasSection">
         <div class="canvasWrapper">
           <CanvasComponent v-bind:weatherInfo="weather" />
@@ -64,6 +65,11 @@ export default {
   methods: {
     toggleFooter() {
       this.isFooterExpanded = !this.isFooterExpanded;
+    },
+    onWeatherContentClick() {
+      if(this.isFooterExpanded){
+        this.toggleFooter();
+      }
     }
   }
 };
