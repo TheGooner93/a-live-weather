@@ -168,14 +168,14 @@ export default {
   margin-top: 1px;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
-  box-shadow: 0 -1px 5px gray;
+  box-shadow: 0 -1px 5px lightblue;
   border-color: lightgrey;
   border-style: solid;
   border-width: 0px 1px 1px 1px;
 }
 
 .footerSection:hover {
-  box-shadow: 0 -1px 10px gray;
+  box-shadow: 0 -1px 10px lightblue;
 }
 
 .blurredFooterExpandedWeatherContentSection {

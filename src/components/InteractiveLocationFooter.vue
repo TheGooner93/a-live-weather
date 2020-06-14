@@ -147,7 +147,7 @@ export default {
 }
 
 .locationInputWrapper {
-  border-bottom: 1px lightgray solid;
+  border-bottom: 1px lightblue solid;
 }
 
 .inputSubtextWrapper {

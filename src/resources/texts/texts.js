@@ -4,3 +4,5 @@ export const FOOTER_INPUT_PLACEHOLDER = 'Type a location...';
 export const DETECT_LOCATION_TEXT = 'Detect Current Location';
 export const UNABLE_TO_FIND_LOCATION_TEXT = 'Location not found. Try again.';
 export const LOADING_TEXT = 'Loading...';
+export const NOW_TEXT = 'Now';
+export const TOMORROW_TEXT = 'Tomorrow';
