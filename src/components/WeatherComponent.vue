@@ -10,7 +10,7 @@
         <div
           v-bind:class="{'weatherTextWrapper' : true, 'weatherTextWrapper-displayed' : !isFooterExpanded, 'weatherTextWrapper-invisible' : isFooterExpanded}"
         >
-          <WeatherInformation v-bind:weatherInfo="weather" />
+          <WeatherInformation v-bind:weatherInfo="weather" v-bind:isWeatherLoading="isWeatherLoading"/>
         </div>
       </section>
     </section>
@@ -47,10 +47,12 @@ export default {
   data: () => ({
     coordinates: {},
     weather: {},
-    isFooterExpanded: false
+    isFooterExpanded: false,
+    isWeatherLoading: false,
   }),
   watch: {
     coordinates: function({ lat = "", lng = "" }) {
+      this.isWeatherLoading = true;
       const unitsSystem = store.state.unitsSystem;
       const weatherPromise = getWeatherAndLocationDetails(
         lat,
@@ -60,7 +62,7 @@ export default {
 
       weatherPromise
         .then(weather => {
-          console.log(weather);
+          this.isWeatherLoading = false;
           const {
             [0]: { data: weatherData = {} },
             [1]: {

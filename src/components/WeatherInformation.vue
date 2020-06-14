@@ -1,37 +1,47 @@
 <template>
-  <div class="weatherContainer">
-    <h1>{{weatherAsPerTimePeriodSelected['city']}}</h1>
-    <h3>{{weatherAsPerTimePeriodSelected['state']? weatherAsPerTimePeriodSelected['state'] + ',' : ''}} {{weatherAsPerTimePeriodSelected['country']}}</h3>
-    <h4>{{weatherAsPerTimePeriodSelected['weather'][0]['main']}}</h4>
-    <div class="propertyContainer">
-      <SingleWeatherPropertyBlob
-        iconSrc="fas fa-thermometer-three-quarters"
-        v-bind:propertyValue="temperature"
-      />
-      <SingleWeatherPropertyBlob iconSrc="fas fa-dewpoint" v-bind:propertyValue="humidity" />
-      <SingleWeatherPropertyBlob iconSrc="fas fa-wind" v-bind:propertyValue="windSpeed" />
+  <Fragment>
+    <div v-if="!isWeatherLoading" class="weatherContainer">
+      <h1>{{weatherAsPerTimePeriodSelected['city']}}</h1>
+      <h3>{{weatherAsPerTimePeriodSelected['state']? weatherAsPerTimePeriodSelected['state'] + ',' : ''}} {{weatherAsPerTimePeriodSelected['country']}}</h3>
+      <h4>{{weatherAsPerTimePeriodSelected['weather'][0]['main']}}</h4>
+      <div class="propertyContainer">
+        <SingleWeatherPropertyBlob
+          iconSrc="fas fa-thermometer-three-quarters"
+          v-bind:propertyValue="temperature"
+        />
+        <SingleWeatherPropertyBlob iconSrc="fas fa-dewpoint" v-bind:propertyValue="humidity" />
+        <SingleWeatherPropertyBlob iconSrc="fas fa-wind" v-bind:propertyValue="windSpeed" />
+      </div>
     </div>
-  </div>
+    <div v-if="isWeatherLoading">{{LOADING_TEXT}}</div>
+  </Fragment>
 </template>
 
 <script>
+import { Fragment } from "vue-fragment";
 import SingleWeatherPropertyBlob from "./SingleWeatherPropertyBlob";
 import store from "../store/store";
+import { LOADING_TEXT } from "../resources/texts/texts";
 
 export default {
   store,
   name: "WeatherInformation",
-  components: { SingleWeatherPropertyBlob },
+  components: { SingleWeatherPropertyBlob, Fragment },
   data: function() {
     return {
       timePeriod: "",
       timePeriodIndex: 1, // showing from the tomorrow onwards
-      weatherAsPerTimePeriodSelected: {}
+      weatherAsPerTimePeriodSelected: {},
+      LOADING_TEXT
     };
   },
   props: {
     weatherInfo: {
       type: Object,
+      required: true
+    },
+    isWeatherLoading: {
+      type: Boolean,
       required: true
     }
   },
