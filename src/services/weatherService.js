@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getWeatherInfoUrl } from '../utility/url';
+import { getWeatherInfoUrl, getGeocodingUrl } from '../utility/url';
 
 export const getWeather = (lat = '', lng = '', unitsSystem = '') => {
     const excludeArray = ['minutely', 'hourly'];
@@ -8,6 +8,20 @@ export const getWeather = (lat = '', lng = '', unitsSystem = '') => {
     return new Promise((resolve, reject) => {
         try {
             const res = axios.get(weatherUrl);
+            resolve(res);
+        }
+        catch (err) {
+            reject(err);
+        }
+    });
+}
+
+export const getGeocodesForLocation = (locationString = '') => {
+    const geocodeUrl = getGeocodingUrl(locationString);
+    
+    return new Promise((resolve, reject) => {
+        try {
+            const res = axios.get(geocodeUrl);
             resolve(res);
         }
         catch (err) {

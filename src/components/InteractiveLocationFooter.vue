@@ -6,18 +6,30 @@
     <div
       v-bind:class="{'invisibleElement' : !isFooterExpanded, 'closeTextWrapper': isFooterExpanded}"
       v-on:click="onCloseClick"
+      v-if="!isLoading"
     >
       <i class="fas fa-times fa-lg"></i>
     </div>
+    <div v-if="isLoading">
+      {{LOADING_TEXT}}
+    </div>
     <section
       v-bind:class="{'invisibleElement' : !isFooterExpanded, 'locationInputSection': isFooterExpanded}"
+      v-if="!isLoading"
     >
       <div class="locationInputWrapper">
-        <input v-bind:placeholder="FOOTER_INPUT_PLACEHOLDER" v-model="citySearchText" />
+        <input
+          v-bind:placeholder="FOOTER_INPUT_PLACEHOLDER"
+          v-model="citySearchText"
+          v-on:keyup.enter="onLocationSearch()"
+        />
       </div>
       <div
-        v-bind:class="{'pt-1 pressEnterTextWrapper' : true, 'invisibleElement' : !citySearchText}"
+        v-bind:class="{'pt-1 inputSubtextWrapper' : true, 'invisibleElement' : !citySearchText || (citySearchText && isSearchErrorShown)}"
       >{{PRESS_ENTER_TEXT}}</div>
+      <div
+        v-bind:class="{'pt-1 inputSubtextWrapper errorText' : true, 'invisibleElement' : !isSearchErrorShown}"
+      >{{UNABLE_TO_FIND_LOCATION_TEXT}}</div>
       <div class="pt-2">or</div>
       <div class="pt-4">
         <button>{{DETECT_LOCATION_TEXT}}</button>
@@ -31,8 +43,12 @@ import {
   FOOTER_TEXT,
   PRESS_ENTER_TEXT,
   DETECT_LOCATION_TEXT,
-  FOOTER_INPUT_PLACEHOLDER
+  FOOTER_INPUT_PLACEHOLDER,
+  UNABLE_TO_FIND_LOCATION_TEXT,
+  LOADING_TEXT,
 } from "../resources/texts/texts";
+
+import { getGeocodesForLocation } from "../services/weatherService";
 
 export default {
   name: "InteractiveLocationFooter",
@@ -41,7 +57,11 @@ export default {
     PRESS_ENTER_TEXT,
     DETECT_LOCATION_TEXT,
     FOOTER_INPUT_PLACEHOLDER,
-    citySearchText: ""
+    UNABLE_TO_FIND_LOCATION_TEXT,
+    LOADING_TEXT,
+    citySearchText: "",
+    isLoading: false,
+    isSearchErrorShown: false
   }),
   props: ["isFooterExpanded"],
   methods: {
@@ -53,6 +73,30 @@ export default {
     onCloseClick: function() {
       this.citySearchText = "";
       this.$emit("footerToggle");
+    },
+    onLocationSearchError: function(err) {
+      this.isSearchErrorShown = true;
+      setTimeout(() => {
+        console.log(err);
+        this.isSearchErrorShown = false;
+      }, 3000);
+    },
+    onLocationSearch: function() {
+      if (this.citySearchText) {
+        this.isLoading = true;
+        const geocodePromise = getGeocodesForLocation(this.citySearchText);
+        geocodePromise.then(
+          data => {
+            this.isLoading = false;
+            console.log(data);
+            this.$emit("footerToggle");
+          },
+          err => {
+            this.isLoading = false;
+            this.onLocationSearchError(err);
+          }
+        );
+      }
     }
   }
 };
@@ -101,13 +145,17 @@ export default {
   border-bottom: 1px lightgray solid;
 }
 
-.pressEnterTextWrapper {
+.inputSubtextWrapper {
   text-align: left;
   font-size: 1rem;
   opacity: 1;
   padding: 1px 2px;
-  height : 2rem;
+  height: 2rem;
   transition: all 0.5s ease;
+}
+
+.errorText {
+  color: red;
 }
 
 input {
