@@ -53,7 +53,7 @@ export default {
   watch: {
     coordinates: function({ lat = "", lng = "" }) {
       this.isWeatherLoading = true;
-      const unitsSystem = store.state.unitsSystem;
+      const unitsSystem = store.state.units.system;
       const weatherPromise = getWeatherAndLocationDetails(
         lat,
         lng,
@@ -107,8 +107,10 @@ export default {
       };
     },
     onGetCurrentLocation() {
+      this.isWeatherLoading = true
       this.$getLocation().then(coordinates => {
         this.coordinates = coordinates;
+        this.isWeatherLoading = false;
       });
     }
   }

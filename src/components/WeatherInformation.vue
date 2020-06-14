@@ -7,10 +7,16 @@
       <div class="propertyContainer">
         <SingleWeatherPropertyBlob
           iconSrc="fas fa-thermometer-three-quarters"
-          v-bind:propertyValue="temperature"
+          v-bind:propertyObject="temperature"
         />
-        <SingleWeatherPropertyBlob iconSrc="fas fa-dewpoint" v-bind:propertyValue="humidity" />
-        <SingleWeatherPropertyBlob iconSrc="fas fa-wind" v-bind:propertyValue="windSpeed" />
+        <SingleWeatherPropertyBlob
+          iconSrc="fas fa-water"
+          v-bind:propertyObject="humidity"
+        />
+        <SingleWeatherPropertyBlob
+          iconSrc="fas fa-wind"
+          v-bind:propertyObject="windSpeed"
+        />
       </div>
     </div>
     <div v-if="isWeatherLoading">{{LOADING_TEXT}}</div>
@@ -76,13 +82,22 @@ export default {
   },
   computed: {
     temperature() {
-      return this.weatherAsPerTimePeriodSelected["temp"];
+      return {
+        value: this.weatherAsPerTimePeriodSelected["temp"],
+        unit: store.state.units.temperature
+      };
     },
     humidity() {
-      return this.weatherAsPerTimePeriodSelected["humidity"];
+      return {
+        value: this.weatherAsPerTimePeriodSelected["humidity"],
+        unit: store.state.units.humidity
+      };
     },
     windSpeed() {
-      return this.weatherAsPerTimePeriodSelected["wind_speed"];
+      return {
+        value: this.weatherAsPerTimePeriodSelected["wind_speed"],
+        unit: store.state.units.windSpeed
+      };
     }
   },
   created() {

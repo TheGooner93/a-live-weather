@@ -1,14 +1,23 @@
 <template>
   <div class="blobWrapper">
     <i v-bind:class="iconSrc"></i>
-    <span class="ml-1 mr-3 propertyValue">{{propertyValue}}</span>
+    <span class="ml-2 propertyData">{{propertyValue}}</span>
+    <span class=" ml-1 mr-4 propertyData">{{propertyUnit}}</span>
   </div>
 </template>
 
 <script>
 export default {
   name: "SingleWeatherPropertyBlob",
-  props: ["iconSrc", "propertyValue"]
+  props: ["iconSrc", "propertyObject"],
+  computed : {
+    propertyValue() {
+      return this.propertyObject['value']
+    },
+    propertyUnit() {
+      return this.propertyObject['unit']
+    },
+  }
 };
 </script>
 
@@ -21,7 +30,7 @@ export default {
   flex-grow: 1;
   justify-content: center;
 }
-.propertyValue {
+.propertyData {
   font-size: 1.2rem;
 }
 </style>

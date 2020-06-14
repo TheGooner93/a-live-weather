@@ -5,11 +5,22 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    unitsSystem: 'metric'
+    units: {
+      system: 'metric',
+      temperature : '°C',
+      humidity : '%',
+      windSpeed : 'm/s',
+    }
   },
   mutations: {
     toggleUnitsSystem (state) {
-      state.unitsSystem = state.unitsSystem === 'metric' ? 'imperial' : 'metric'
+      const newUnitsState = {
+        system: state.units.system === 'metric' ? 'imperial' : 'metric',
+        temperature : state.units.system === 'metric' ? '°C' : '°F',
+        humidity : '%',
+        windSpeed : state.units.system === 'metric' ? 'm/s': 'mph',
+      }
+      state.units = {...newUnitsState};
     }
   }
 });
