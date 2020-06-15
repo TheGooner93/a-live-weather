@@ -13,7 +13,12 @@
         <SingleWeatherPropertyBlob iconSrc="fas fa-wind" v-bind:propertyObject="windSpeed" />
       </div>
       <div class="timeButtonWrapper">
-        <button class="timePeriodButton" v-on:click="onToggleTimePeriod">{{buttonText}}</button>
+        <button
+          v-bind:class="{'timePeriodButton': true, 'timePeriodButton-mousedown':isToggleButtonMouseDown, 'timePeriodButton-mouseup':!isToggleButtonMouseDown}"
+          v-on:click="onToggleTimePeriod"
+          v-on:mousedown="onToggleTimeMouseDownToggle"
+          v-on:mouseup="onToggleTimeMouseDownToggle"
+        >{{buttonText}}</button>
       </div>
     </div>
     <div v-if="isWeatherLoading">{{LOADING_TEXT}}</div>
@@ -29,7 +34,7 @@ import {
   NOW_TEXT,
   TOMORROW_TEXT
 } from "../resources/texts/texts";
-import {getMonthName} from '../utility/months';
+import { getMonthName } from "../utility/months";
 
 export default {
   store,
@@ -41,6 +46,7 @@ export default {
       timePeriodIndex: 0, // showing from the tomorrow onwards
       weather: {},
       weatherAsPerTimePeriodSelected: {},
+      isToggleButtonMouseDown: false,
       LOADING_TEXT,
       NOW_TEXT,
       TOMORROW_TEXT
@@ -125,13 +131,17 @@ export default {
       };
     },
     buttonText() {
-      const monthName = getMonthName(new Date(this.weatherAsPerTimePeriodSelected["dt"] * 1000).getMonth());
+      const monthName = getMonthName(
+        new Date(this.weatherAsPerTimePeriodSelected["dt"] * 1000).getMonth()
+      );
 
       return this.timePeriod === "current"
         ? this.NOW_TEXT
         : this.timePeriod === "daily" && this.timePeriodIndex === 1
         ? this.TOMORROW_TEXT
-        : new Date(this.weatherAsPerTimePeriodSelected["dt"] * 1000).getDate().toString() + ` ${monthName}`;
+        : new Date(this.weatherAsPerTimePeriodSelected["dt"] * 1000)
+            .getDate()
+            .toString() + ` ${monthName}`;
     }
   },
   created() {
@@ -149,6 +159,11 @@ export default {
           this.timePeriodIndex++;
         }
       }
+    },
+    onToggleTimeMouseDownToggle: function() {
+      this.isToggleButtonMouseDown = this.isToggleButtonMouseDown
+        ? false
+        : true;
     }
   }
 };
@@ -190,9 +205,17 @@ export default {
   transition: all 0.3s ease;
 }
 
+.timePeriodButton-mousedown {
+  transform: scale(0.9);
+}
+
+.timePeriodButton-mouseup {
+  transform: scale(1);
+}
+
 .timePeriodButton:hover {
-  box-shadow: 5px 5px black;
   transition: all 0.3s ease;
+  box-shadow: 5px 5px black;
 }
 
 .timePeriodButton:focus {
