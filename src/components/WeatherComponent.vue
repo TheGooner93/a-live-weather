@@ -206,12 +206,16 @@ export default {
 
 @media (max-width: 720px) {
   .weatherTextWrapper {
-    width: 85%;
     top: 10vh;
   }
-
   .footerExpanded {
     min-height: 70vh;
+  }
+}
+
+@media (max-width: 1024px) {
+  .weatherTextWrapper {
+    width: 85%;
   }
 }
 </style>

@@ -33,10 +33,10 @@ export default {
       canvas.height = window.innerHeight;
 
     //   initRain();
-      initLightning();
-      initClouds();
+      // initLightning();
+      // initClouds();
     //   initSnow();
-    //   initSun();
+      initSun();
     });
 
     class RainDrop {
@@ -387,7 +387,7 @@ export default {
 
     function initSun() {
       const x = innerWidth / 2;
-      const y = innerHeight / 4;
+      const y = innerHeight / 4.6;
       const r = innerHeight / 20;
       const dRayAngle = 180 / Math.PI;
 
@@ -422,7 +422,7 @@ export default {
 
     // initRain();
     // initLightning();
-    initClouds();
+    // initClouds();
     // initSnow();
     initSun();
 
