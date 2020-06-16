@@ -16,17 +16,17 @@ export default {
 
     const ctx = canvas.getContext("2d");
 
-    // var raindropLength = 70;
-    // var raindropCount = 200;
-    // var rainAngle = -10;
-    // var currentCursor = 0;
+    const raindropLength = 70;
+    const raindropCount = 200;
+    const rainAngle = -10;
+    // const currentCursor = 0;
     const lightningBoltCount = 50;
     const cloudsCount = 50;
     const cloudRadius = 20;
-    // const snowflakeCount = 130;
-    // const snowAngle = -50;
-    // const snowflakeSize = 30;
-    // const rayCount = 8;
+    const snowflakeCount = 130;
+    const snowAngle = -50;
+    const snowflakeSize = 30;
+    const rayCount = 8;
 
     window.addEventListener("resize", () => {
       canvas.width = window.innerWidth;
@@ -39,49 +39,49 @@ export default {
     //   initSun();
     });
 
-    // class RainDrop {
-    //   constructor(x, y, draindrop) {
-    //     this.x = x;
-    //     this.y = -y;
-    //     this.dx = draindrop;
-    //     this.dy = draindrop;
-    //   }
+    class RainDrop {
+      constructor(x, y, draindrop) {
+        this.x = x;
+        this.y = -y;
+        this.dx = draindrop;
+        this.dy = draindrop;
+      }
 
-    //   draw() {
-    //     const dropBaseLength = 50;
-    //     const dropCurveRadius = raindropLength / 8;
-    //     const dropCurveStartAngle = -rainAngle * (Math.PI / 180);
+      draw() {
+        const dropBaseLength = 50;
+        const dropCurveRadius = raindropLength / 8;
+        const dropCurveStartAngle = -rainAngle * (Math.PI / 180);
 
-    //     ctx.beginPath();
-    //     ctx.arc(
-    //       this.x - rainAngle,
-    //       this.y + dropBaseLength,
-    //       dropCurveRadius,
-    //       dropCurveStartAngle,
-    //       dropCurveStartAngle + Math.PI,
-    //       false
-    //     );
-    //     ctx.lineTo(this.x - rainAngle * 3, this.y);
-    //     ctx.closePath();
+        ctx.beginPath();
+        ctx.arc(
+          this.x - rainAngle,
+          this.y + dropBaseLength,
+          dropCurveRadius,
+          dropCurveStartAngle,
+          dropCurveStartAngle + Math.PI,
+          false
+        );
+        ctx.lineTo(this.x - rainAngle * 3, this.y);
+        ctx.closePath();
 
-    //     ctx.fillStyle = "#BFF4F7";
-    //     ctx.fill();
+        ctx.fillStyle = "#BFF4F7";
+        ctx.fill();
 
-    //     ctx.strokeStyle = "#99EDF3";
-    //     ctx.stroke();
-    //   }
+        ctx.strokeStyle = "#99EDF3";
+        ctx.stroke();
+      }
 
-    //   update() {
-    //     if (this.x - raindropLength > innerWidth || this.y > innerHeight) {
-    //       this.x = innerWidth - this.x;
-    //       this.y = -raindropLength;
-    //     }
-    //     this.x += this.dx * rainAngle * 0.01;
-    //     this.y += this.dy;
+      update() {
+        if (this.x - raindropLength > innerWidth || this.y > innerHeight) {
+          this.x = innerWidth - this.x;
+          this.y = -raindropLength;
+        }
+        this.x += this.dx * rainAngle * 0.01;
+        this.y += this.dy;
 
-    //     this.draw();
-    //   }
-    // }
+        this.draw();
+      }
+    }
 
     class LightningBolt {
       constructor(x, dy, size) {
@@ -213,122 +213,122 @@ export default {
       }
     }
 
-    // class Snowflake {
-    //   constructor(x, y, sizeScaler, dSnowflake) {
-    //     this.x = x;
-    //     this.y = y;
-    //     this.size = snowflakeSize * sizeScaler;
-    //     this.dx = dSnowflake;
-    //     this.dy = dSnowflake;
-    //   }
+    class Snowflake {
+      constructor(x, y, sizeScaler, dSnowflake) {
+        this.x = x;
+        this.y = y;
+        this.size = snowflakeSize * sizeScaler;
+        this.dx = dSnowflake;
+        this.dy = dSnowflake;
+      }
 
-    //   draw() {
-    //     ctx.beginPath();
+      draw() {
+        ctx.beginPath();
 
-    //     for (let theta = 0; theta < 2 * Math.PI; theta += Math.PI / 4) {
-    //       ctx.moveTo(this.x, this.y);
+        for (let theta = 0; theta < 2 * Math.PI; theta += Math.PI / 4) {
+          ctx.moveTo(this.x, this.y);
 
-    //       let newXCoordinate = this.x + (this.size / 2) * Math.cos(theta);
-    //       let newYCoordinate = this.y + (this.size / 2) * Math.sin(theta);
+          let newXCoordinate = this.x + (this.size / 2) * Math.cos(theta);
+          let newYCoordinate = this.y + (this.size / 2) * Math.sin(theta);
 
-    //       ctx.lineTo(newXCoordinate, newYCoordinate);
+          ctx.lineTo(newXCoordinate, newYCoordinate);
 
-    //       ctx.moveTo(this.x, this.y);
+          ctx.moveTo(this.x, this.y);
 
-    //       let subPatternXCoordinate =
-    //         this.x + (this.size / 3) * Math.cos(theta);
-    //       let subPatternYCoordinate =
-    //         this.y + (this.size / 3) * Math.sin(theta);
+          let subPatternXCoordinate =
+            this.x + (this.size / 3) * Math.cos(theta);
+          let subPatternYCoordinate =
+            this.y + (this.size / 3) * Math.sin(theta);
 
-    //       ctx.moveTo(subPatternXCoordinate, subPatternYCoordinate);
-    //       ctx.lineTo(
-    //         subPatternXCoordinate +
-    //           (this.size / 6) * Math.cos(theta + Math.PI / 4),
-    //         subPatternYCoordinate +
-    //           (this.size / 4) * Math.sin(theta + Math.PI / 4)
-    //       );
+          ctx.moveTo(subPatternXCoordinate, subPatternYCoordinate);
+          ctx.lineTo(
+            subPatternXCoordinate +
+              (this.size / 6) * Math.cos(theta + Math.PI / 4),
+            subPatternYCoordinate +
+              (this.size / 4) * Math.sin(theta + Math.PI / 4)
+          );
 
-    //       ctx.moveTo(subPatternXCoordinate, subPatternYCoordinate);
-    //       ctx.lineTo(
-    //         subPatternXCoordinate -
-    //           (this.size / 6) * Math.cos(theta + Math.PI / 4),
-    //         subPatternYCoordinate -
-    //           (this.size / 4) * Math.sin(theta + Math.PI / 4)
-    //       );
+          ctx.moveTo(subPatternXCoordinate, subPatternYCoordinate);
+          ctx.lineTo(
+            subPatternXCoordinate -
+              (this.size / 6) * Math.cos(theta + Math.PI / 4),
+            subPatternYCoordinate -
+              (this.size / 4) * Math.sin(theta + Math.PI / 4)
+          );
 
-    //       ctx.strokeStyle = "lightblue";
-    //       ctx.stroke();
-    //     }
-    //   }
+          ctx.strokeStyle = "lightblue";
+          ctx.stroke();
+        }
+      }
 
-    //   update() {
-    //     if (
-    //       this.x + this.size / 2 < 0 ||
-    //       this.y - this.size / 2 > innerHeight
-    //     ) {
-    //       this.x = innerWidth - this.x;
-    //       this.y = -this.size / 2;
-    //     }
-    //     this.x += this.dx * snowAngle * 0.001;
-    //     this.y += this.dy;
+      update() {
+        if (
+          this.x + this.size / 2 < 0 ||
+          this.y - this.size / 2 > innerHeight
+        ) {
+          this.x = innerWidth - this.x;
+          this.y = -this.size / 2;
+        }
+        this.x += this.dx * snowAngle * 0.001;
+        this.y += this.dy;
 
-    //     this.draw();
-    //   }
-    // }
+        this.draw();
+      }
+    }
 
-    // class Sun {
-    //   constructor(x, y, r, dRayAngle) {
-    //     this.x = x;
-    //     this.y = y;
-    //     this.r = r;
-    //     this.dRayAngle = dRayAngle;
-    //     this.rayAngle = (2 * Math.PI) / rayCount;
-    //   }
+    class Sun {
+      constructor(x, y, r, dRayAngle) {
+        this.x = x;
+        this.y = y;
+        this.r = r;
+        this.dRayAngle = dRayAngle;
+        this.rayAngle = (2 * Math.PI) / rayCount;
+      }
 
-    //   draw() {
-    //     ctx.beginPath();
-    //     ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
-    //     ctx.fillStyle = "#FFE656";
-    //     ctx.fill();
-    //     ctx.closePath();
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
+        ctx.fillStyle = "#FFE656";
+        ctx.fill();
+        ctx.closePath();
 
-    //     ctx.lineWidth = 2;
+        ctx.lineWidth = 2;
 
-    //     ctx.beginPath();
-    //     for (
-    //       let preTheta = 0;
-    //       preTheta < 2 * Math.PI;
-    //       preTheta += this.rayAngle
-    //     ) {
-    //       const theta = preTheta + (this.dRayAngle * 180) / Math.PI;
+        ctx.beginPath();
+        for (
+          let preTheta = 0;
+          preTheta < 2 * Math.PI;
+          preTheta += this.rayAngle
+        ) {
+          const theta = preTheta + (this.dRayAngle * 180) / Math.PI;
 
-    //       const fromCoordinate = 1.5 * this.r;
-    //       const toCoordinate = 2.85 * this.r;
+          const fromCoordinate = 1.5 * this.r;
+          const toCoordinate = 2.85 * this.r;
 
-    //       ctx.moveTo(
-    //         this.x + Math.cos(theta) * fromCoordinate,
-    //         this.y + Math.sin(theta) * fromCoordinate
-    //       );
-    //       ctx.lineTo(
-    //         this.x + Math.cos(theta) * toCoordinate,
-    //         this.y + Math.sin(theta) * toCoordinate
-    //       );
-    //     }
+          ctx.moveTo(
+            this.x + Math.cos(theta) * fromCoordinate,
+            this.y + Math.sin(theta) * fromCoordinate
+          );
+          ctx.lineTo(
+            this.x + Math.cos(theta) * toCoordinate,
+            this.y + Math.sin(theta) * toCoordinate
+          );
+        }
 
-    //     ctx.strokeStyle = "#FFE656";
-    //     ctx.stroke();
-    //   }
+        ctx.strokeStyle = "#FFE656";
+        ctx.stroke();
+      }
 
-    //   update() {
-    //     if (this.dRayAngle === 2 * Math.PI) {
-    //       this.dRayAngle = 0;
-    //     }
+      update() {
+        if (this.dRayAngle === 2 * Math.PI) {
+          this.dRayAngle = 0;
+        }
 
-    //     this.dRayAngle += 45 / Math.PI;
+        this.dRayAngle += 45 / Math.PI;
 
-    //     this.draw();
-    //   }
-    // }
+        this.draw();
+      }
+    }
 
     var raindropArray = [];
     var lighningBoltArray = [];
@@ -336,17 +336,17 @@ export default {
     var snowflakeArray = [];
     let createdSun;
 
-    // function initRain() {
-    //   raindropArray = [];
-    //   for (var p = 0; p < raindropCount; p++) {
-    //     var x = Math.random() * innerWidth;
-    //     var y = 50;
-    //     var draindrop = Math.random() * 13; //velocity
-    //     // var dy = Math.random() * 15; //velocity
-    //     const createdRaindrop = new RainDrop(x, y, draindrop);
-    //     raindropArray.push(createdRaindrop);
-    //   }
-    // }
+    function initRain() {
+      raindropArray = [];
+      for (var p = 0; p < raindropCount; p++) {
+        var x = Math.random() * innerWidth;
+        var y = 50;
+        var draindrop = Math.random() * 13; //velocity
+        // var dy = Math.random() * 15; //velocity
+        const createdRaindrop = new RainDrop(x, y, draindrop);
+        raindropArray.push(createdRaindrop);
+      }
+    }
 
     function initLightning() {
       lighningBoltArray = [];
@@ -372,27 +372,27 @@ export default {
       }
     }
 
-    // function initSnow() {
-    //   snowflakeArray = [];
-    //   for (var p = 0; p < snowflakeCount; p++) {
-    //     var x = Math.random() * innerWidth;
-    //     var y = -50;
-    //     var sizeScaler = Math.random() * 1.3;
-    //     var dSnowflake = Math.random() * 10; //velocity
+    function initSnow() {
+      snowflakeArray = [];
+      for (var p = 0; p < snowflakeCount; p++) {
+        var x = Math.random() * innerWidth;
+        var y = -50;
+        var sizeScaler = Math.random() * 1.3;
+        var dSnowflake = Math.random() * 10; //velocity
 
-    //     const createdSnowflake = new Snowflake(x, y, sizeScaler, dSnowflake);
-    //     snowflakeArray.push(createdSnowflake);
-    //   }
-    // }
+        const createdSnowflake = new Snowflake(x, y, sizeScaler, dSnowflake);
+        snowflakeArray.push(createdSnowflake);
+      }
+    }
 
-    // function initSun() {
-    //   const x = innerWidth / 2;
-    //   const y = innerHeight / 4;
-    //   const r = innerHeight / 20;
-    //   const dRayAngle = 180 / Math.PI;
+    function initSun() {
+      const x = innerWidth / 2;
+      const y = innerHeight / 4;
+      const r = innerHeight / 20;
+      const dRayAngle = 180 / Math.PI;
 
-    //   createdSun = new Sun(x, y, r, dRayAngle);
-    // }
+      createdSun = new Sun(x, y, r, dRayAngle);
+    }
 
     function animate() {
       requestAnimationFrame(animate);
@@ -421,10 +421,10 @@ export default {
     }
 
     // initRain();
-    initLightning();
+    // initLightning();
     initClouds();
     // initSnow();
-    // initSun();
+    initSun();
 
     animate();
   }

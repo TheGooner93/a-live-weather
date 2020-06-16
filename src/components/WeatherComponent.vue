@@ -144,6 +144,7 @@ export default {
 
 .weatherTextWrapper {
   position: relative;
+  top: 5vh;
   z-index: 4;
   width: 50%;
   transition: all 0.3s ease;
@@ -206,6 +207,7 @@ export default {
 @media (max-width: 720px) {
   .weatherTextWrapper {
     width: 85%;
+    top: 10vh;
   }
 
   .footerExpanded {
