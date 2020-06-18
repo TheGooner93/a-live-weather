@@ -35,6 +35,7 @@ import {
   TOMORROW_TEXT
 } from "../resources/texts/texts";
 import { getMonthName } from "../utility/months";
+import { UPDATE_ACTIVE_WEATHER } from "../store/mutations";
 
 export default {
   store,
@@ -42,7 +43,7 @@ export default {
   components: { SingleWeatherPropertyBlob, Fragment },
   data: function() {
     return {
-      timePeriod: "",
+      timePeriod: "current",
       timePeriodIndex: 0, // showing from the tomorrow onwards
       weather: {},
       weatherAsPerTimePeriodSelected: {},
@@ -66,6 +67,7 @@ export default {
     weatherInfo: {
       deep: true,
       handler(weatherInfo) {
+        this.timePeriod = "current";
         this.weatherAsPerTimePeriodSelected = {
           ...weatherInfo[this.timePeriod],
           state: weatherInfo["state"],
@@ -84,8 +86,6 @@ export default {
           city: this.weatherInfo["city"]
         };
       } else if (timePeriod === "daily" && this.timePeriodIndex === 0) {
-        // this.timePeriodIndex++;
-
         this.weatherAsPerTimePeriodSelected = {
           ...this.weatherInfo[timePeriod][this.timePeriodIndex],
           temp: this.weatherInfo[timePeriod][this.timePeriodIndex]["temp"][
@@ -108,6 +108,12 @@ export default {
           country: this.weatherInfo["country"],
           city: this.weatherInfo["city"]
         };
+      }
+    },
+    weatherAsPerTimePeriodSelected: {
+      deep: true,
+      handler(weatherAsPerTimePeriodSelected) {
+        store.dispatch(UPDATE_ACTIVE_WEATHER, weatherAsPerTimePeriodSelected);
       }
     }
   },

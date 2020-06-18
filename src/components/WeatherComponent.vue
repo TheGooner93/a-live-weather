@@ -5,7 +5,7 @@
         <div
           v-bind:class="{'canvasWrapper' : true, 'blurredFooterExpandedWeatherContentSection' : isFooterExpanded,'blurredFooterCollapsedWeatherContentSection' : !isFooterExpanded}"
         >
-          <CanvasComponent v-bind:weatherInfo="weather" />
+          <CanvasComponent />
         </div>
         <div
           v-bind:class="{'weatherTextWrapper' : true, 'weatherTextWrapper-displayed' : !isFooterExpanded, 'weatherTextWrapper-invisible' : isFooterExpanded}"
@@ -86,9 +86,6 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    weather: function(weather) {
-      console.log("Weather: ", weather);
-    }
   },
   created() {
     //Get geolocation
@@ -110,11 +107,18 @@ export default {
       };
     },
     onGetCurrentLocation() {
-      this.isWeatherLoading = true;
-      this.$getLocation().then(coordinates => {
-        this.coordinates = coordinates;
-        this.isWeatherLoading = false;
-      });
+      if (window.location.hostname.includes("localhost")) {
+        this.coordinates = {
+          lat: "25.204",
+          lng: "55.27"
+        };
+      } else {
+        this.isWeatherLoading = true;
+        this.$getLocation().then(coordinates => {
+          this.coordinates = coordinates;
+          this.isWeatherLoading = false;
+        });
+      }
     }
   }
 };
