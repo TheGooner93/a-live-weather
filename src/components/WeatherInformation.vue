@@ -70,7 +70,7 @@ export default {
         this.timePeriod = "current";
         this.weatherAsPerTimePeriodSelected = {
           ...weatherInfo[this.timePeriod],
-          state: weatherInfo["state"],
+          state: this.weatherInfo["state"] === this.weatherInfo["city"]? '' : this.weatherInfo["state"],
           country: weatherInfo["country"],
           city: weatherInfo["city"]
         };
@@ -81,7 +81,7 @@ export default {
         this.timePeriodIndex = 0;
         this.weatherAsPerTimePeriodSelected = {
           ...this.weatherInfo[timePeriod],
-          state: this.weatherInfo["state"],
+          state: this.weatherInfo["state"] === this.weatherInfo["city"]? '' : this.weatherInfo["state"],
           country: this.weatherInfo["country"],
           city: this.weatherInfo["city"]
         };
@@ -91,7 +91,7 @@ export default {
           temp: this.weatherInfo[timePeriod][this.timePeriodIndex]["temp"][
             "day"
           ],
-          state: this.weatherInfo["state"],
+          state: this.weatherInfo["state"] === this.weatherInfo["city"]? '' : this.weatherInfo["state"],
           country: this.weatherInfo["country"],
           city: this.weatherInfo["city"]
         };
@@ -104,7 +104,7 @@ export default {
           temp: this.weatherInfo[this.timePeriod][this.timePeriodIndex]["temp"][
             "day"
           ],
-          state: this.weatherInfo["state"],
+          state: this.weatherInfo["state"] === this.weatherInfo["city"]? '' : this.weatherInfo["state"],
           country: this.weatherInfo["country"],
           city: this.weatherInfo["city"]
         };
