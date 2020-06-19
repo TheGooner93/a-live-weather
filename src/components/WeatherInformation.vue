@@ -3,7 +3,7 @@
     <div v-if="!isWeatherLoading" class="weatherContainer">
       <h1>{{weatherAsPerTimePeriodSelected['city']}}</h1>
       <h3>{{weatherAsPerTimePeriodSelected['state']? weatherAsPerTimePeriodSelected['state'] + ',' : ''}} {{weatherAsPerTimePeriodSelected['country']}}</h3>
-      <h4>{{weatherAsPerTimePeriodSelected['weather'][0]['main']}}</h4>
+      <h4 class='weatherDescription'>{{weatherAsPerTimePeriodSelected['weather'][0]['description']}}</h4>
       <div class="propertyContainer">
         <SingleWeatherPropertyBlob
           iconSrc="fas fa-thermometer-three-quarters"
@@ -183,6 +183,10 @@ export default {
   display: flex;
   flex-direction: column;
   box-shadow: 5px 5px lightblue;
+}
+
+.weatherDescription {
+  text-transform: capitalize;
 }
 
 .propertyContainer {

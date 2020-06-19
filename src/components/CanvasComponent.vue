@@ -15,22 +15,30 @@ import {
 } from "../utility/weatherTypes";
 import { UPDATE_ACTIVE_WEATHER } from "../store/mutations";
 
+const raindropLength = 70;
+const raindropCount = 200;
+const rainAngle = -10;
+const lightningBoltCount = 50;
+const cloudsCount = 40;
+const cloudRadius = 20;
+const snowflakeCount = 50;
+const snowAngle = -50;
+const snowflakeSize = 30;
+const rayCount = 8;
+const particleCount = 700;
+const particleRadius = 0.6;
+
 export default {
   store,
   name: "CanvasComponent",
   data: () => ({
-    weatherCondition: ''
+    weatherCondition: ""
   }),
   mounted: function() {
     store.subscribe((mutation, state) => {
       switch (mutation.type) {
         case UPDATE_ACTIVE_WEATHER: {
-          const {
-            weather: {
-              [0]: { main: weatherCondition = "" }
-            }
-          } = state.activeWeather;
-          this.weatherCondition = weatherCondition;
+          this.weatherCondition = state.activeWeather;
           break;
         }
       }
@@ -40,26 +48,19 @@ export default {
     weatherCondition: {
       deep: true,
       handler(weatherCondition) {
+        const {
+          clouds: cloudiness = 0,
+          weather: {
+            [0]: { main: weatherConditionName = "" }
+          }
+        } = weatherCondition;
+
         const canvas = this.$refs["canvas"];
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
         const ctx = canvas.getContext("2d");
-
-        const raindropLength = 70;
-        const raindropCount = 200;
-        const rainAngle = -10;
-        // const currentCursor = 0;
-        const lightningBoltCount = 50;
-        const cloudsCount = 40;
-        const cloudRadius = 20;
-        const snowflakeCount = 50;
-        const snowAngle = -50;
-        const snowflakeSize = 30;
-        const rayCount = 8;
-        const particleCount = 700;
-        const particleRadius = 0.6;
 
         // window.addEventListener("resize", () => {
         //   canvas.width = window.innerWidth;
@@ -234,7 +235,8 @@ export default {
             );
 
             // ctx.fillStyle = `rgb(169,169,169)`;
-            ctx.fillStyle = `lightblue`;
+            ctx.fillStyle =
+              weatherConditionName === CLEAR ? "white" : "lightblue";
             ctx.fill();
 
             ctx.strokeStyle = "gray";
@@ -441,9 +443,12 @@ export default {
 
         function initClouds() {
           cloudsArray = [];
-          for (var p = 0; p < cloudsCount; p++) {
+          const cloudsToBeLoaded = cloudiness
+            ? Math.ceil((cloudiness * cloudsCount) / 100)
+            : cloudsCount;
+          for (var p = 0; p < cloudsToBeLoaded; p++) {
             var x = Math.random() * innerWidth;
-            var y = Math.random() * (innerHeight / 10);
+            var y = Math.random() * (innerHeight / 5);
             var dx = Math.random() * 2;
             var size = Math.random() * 5;
 
@@ -510,10 +515,6 @@ export default {
             snowflakeArray[g].update();
           }
 
-          for (let g = 0; g < cloudsArray.length; g++) {
-            cloudsArray[g].update();
-          }
-
           for (let g = 0; g < particleArray.length; g++) {
             particleArray[g].update();
           }
@@ -521,9 +522,13 @@ export default {
           if (createdSun) {
             createdSun.update();
           }
+
+          for (let g = 0; g < cloudsArray.length; g++) {
+            cloudsArray[g].update();
+          }
         }
 
-        switch (weatherCondition) {
+        switch (weatherConditionName) {
           case RAIN: {
             initClouds();
             initRain();
@@ -535,6 +540,9 @@ export default {
           }
           case CLEAR: {
             initSun();
+            if (cloudiness) {
+              initClouds();
+            }
             break;
           }
           case THUNDERSTORM: {
