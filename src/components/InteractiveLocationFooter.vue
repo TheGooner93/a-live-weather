@@ -30,7 +30,11 @@
       >{{UNABLE_TO_FIND_LOCATION_TEXT}}</div>
       <div class="pt-2">or</div>
       <div class="pt-4">
-        <button v-on:click='onDetectLocationButtonClick'>{{DETECT_LOCATION_TEXT}}</button>
+        <button
+          v-bind:class="{'detectLocationButton': true, 'detectLocationButton-mousedown':isButtonMouseDown, 'detectLocationButton-mouseup':!isButtonMouseDown}"
+          v-on:mousedown="onButtonMouseDownToggle"
+          v-on:mouseup="onButtonMouseDownToggle"
+        >{{DETECT_LOCATION_TEXT}}</button>
       </div>
     </section>
   </footer>
@@ -59,10 +63,20 @@ export default {
     LOADING_TEXT,
     citySearchText: "",
     isLoading: false,
-    isSearchErrorShown: false
+    isSearchErrorShown: false,
+    isButtonMouseDown: false
   }),
   props: ["isFooterExpanded"],
   methods: {
+    onButtonMouseDownToggle: function() {
+      if (this.isButtonMouseDown) {
+        this.isButtonMouseDown = false;
+        this.$emit("getCurrentLocation");
+        setTimeout(() => this.$emit("footerToggle"), 100);
+      } else {
+        this.isButtonMouseDown = true;
+      }
+    },
     onToggleFooter: function() {
       if (!this.isFooterExpanded) {
         this.citySearchText = "";
@@ -102,10 +116,6 @@ export default {
           }
         );
       }
-    },
-    onDetectLocationButtonClick : function() {
-      this.$emit('getCurrentLocation');
-      this.$emit("footerToggle");
     }
   }
 };
@@ -170,12 +180,24 @@ input {
   background: transparent;
 }
 
-button {
+.detectLocationButton {
   padding: 0.35rem 0.5rem 0.25rem 0.5rem;
   border-radius: 1rem;
   text-align: left;
   color: white;
   background: black;
+}
+
+.detectLocationButton:focus {
+  outline: none;
+}
+
+.detectLocationButton-mousedown {
+  transform: scale(0.9);
+}
+
+.detectLocationButton-mouseup {
+  transform: scale(1);
 }
 
 .invisibleElement {

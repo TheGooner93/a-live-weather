@@ -235,7 +235,6 @@ export default {
               true
             );
 
-            // ctx.fillStyle = `rgb(169,169,169)`;
             ctx.fillStyle =
               weatherConditionName === CLEAR
                 ? "rgba(255, 255, 255, 0.5)"
