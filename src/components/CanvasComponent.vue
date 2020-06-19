@@ -50,6 +50,7 @@ export default {
       handler(weatherCondition) {
         const {
           clouds: cloudiness = 0,
+          rain: precipitation = 0,
           weather: {
             [0]: { main: weatherConditionName = "" }
           }
@@ -236,7 +237,11 @@ export default {
 
             // ctx.fillStyle = `rgb(169,169,169)`;
             ctx.fillStyle =
-              weatherConditionName === CLEAR ? "white" : "lightblue";
+              weatherConditionName === CLEAR
+                ? "rgba(255, 255, 255, 0.5)"
+                : weatherConditionName === THUNDERSTORM
+                ? "lightgray"
+                : "lightblue";
             ctx.fill();
 
             ctx.strokeStyle = "gray";
@@ -420,7 +425,17 @@ export default {
 
         function initRain() {
           raindropArray = [];
-          for (var p = 0; p < raindropCount; p++) {
+
+          const rainDensity = Math.ceil(
+            parseFloat(precipitation)
+              ? Math.min(
+                  (precipitation * 8 * raindropCount) / 100,
+                  raindropCount
+                )
+              : raindropCount
+          );
+
+          for (var p = 0; p < rainDensity; p++) {
             var x = Math.random() * innerWidth;
             var y = 50;
             var draindrop = Math.random() * 13; //velocity
@@ -443,9 +458,12 @@ export default {
 
         function initClouds() {
           cloudsArray = [];
-          const cloudsToBeLoaded = cloudiness
-            ? Math.ceil((cloudiness * cloudsCount) / 100)
-            : cloudsCount;
+          const cloudsToBeLoaded =
+            cloudiness &&
+            weatherConditionName !== RAIN &&
+              weatherConditionName !== THUNDERSTORM
+              ? Math.ceil((cloudiness * cloudsCount) / 100)
+              : cloudsCount;
           for (var p = 0; p < cloudsToBeLoaded; p++) {
             var x = Math.random() * innerWidth;
             var y = Math.random() * (innerHeight / 5);
