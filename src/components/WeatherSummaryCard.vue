@@ -39,7 +39,7 @@ import { UPDATE_ACTIVE_WEATHER } from "../store/mutations";
 
 export default {
   store,
-  name: "WeatherInformation",
+  name: "WeatherSummaryCard",
   components: { SingleWeatherPropertyBlob, Fragment },
   data: function() {
     return {

@@ -10,7 +10,7 @@
         <div
           v-bind:class="{'weatherTextWrapper' : true, 'weatherTextWrapper-displayed' : !isFooterExpanded, 'weatherTextWrapper-invisible' : isFooterExpanded}"
         >
-          <WeatherInformation
+          <WeatherSummaryCard
             v-bind:weatherInfo="weather"
             v-bind:isWeatherLoading="isWeatherLoading"
           />
@@ -35,7 +35,7 @@ import { Fragment } from "vue-fragment";
 import { getWeatherAndLocationDetails } from "../services/weatherService";
 import InteractiveLocationFooter from "./InteractiveLocationFooter";
 import CanvasComponent from "./CanvasComponent";
-import WeatherInformation from "./WeatherInformation";
+import WeatherSummaryCard from "./WeatherSummaryCard";
 import store from "../store/store";
 
 export default {
@@ -45,7 +45,7 @@ export default {
     Fragment,
     InteractiveLocationFooter,
     CanvasComponent,
-    WeatherInformation
+    WeatherSummaryCard
   },
   data: () => ({
     coordinates: {},
