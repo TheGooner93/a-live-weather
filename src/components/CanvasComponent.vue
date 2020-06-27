@@ -463,6 +463,8 @@ export default {
             weatherConditionName !== THUNDERSTORM
               ? Math.ceil((cloudiness * cloudsCount) / 100)
               : cloudsCount;
+          store.dispatch(UPDATE_COLOR_ACCENT, "lightblue");
+
           for (var p = 0; p < cloudsToBeLoaded; p++) {
             var x = Math.random() * innerWidth;
             var y = Math.random() * (innerHeight / 5);
@@ -482,6 +484,8 @@ export default {
             var sizeScaler = Math.random() * 1.3;
             var dSnowflake = Math.random() * 10; //velocity
 
+            store.dispatch(UPDATE_COLOR_ACCENT, "lightblue");
+
             const createdSnowflake = new Snowflake(
               x,
               y,
@@ -498,7 +502,7 @@ export default {
           const r = innerHeight / 20;
           const dRayAngle = 180 / Math.PI;
 
-          store.dispatch(UPDATE_COLOR_ACCENT, '#FFE656');
+          store.dispatch(UPDATE_COLOR_ACCENT, "#FFE656");
 
           createdSun = new Sun(x, y, r, dRayAngle);
         }
@@ -511,6 +515,8 @@ export default {
             const dx = Math.random(); //velocity
             const dy = Math.random() * 2; //velocity
             const color = "brown";
+
+            store.dispatch(UPDATE_COLOR_ACCENT, "brown");
 
             const createdParticle = new Particle(x, y, dx, dy, color);
             particleArray.push(createdParticle);
