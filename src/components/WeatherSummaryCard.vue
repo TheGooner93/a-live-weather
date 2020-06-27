@@ -1,9 +1,9 @@
 <template>
   <Fragment>
-    <div v-if="!isWeatherLoading" class="weatherContainer">
+    <div v-if="!isWeatherLoading" class="weatherContainer" v-bind:style="boxShadowStyle">
       <h1>{{weatherAsPerTimePeriodSelected['city']}}</h1>
       <h3>{{weatherAsPerTimePeriodSelected['state']? weatherAsPerTimePeriodSelected['state'] + ',' : ''}} {{weatherAsPerTimePeriodSelected['country']}}</h3>
-      <h4 class='weatherDescription'>{{weatherAsPerTimePeriodSelected['weather'][0]['description']}}</h4>
+      <h4 class="weatherDescription">{{weatherAsPerTimePeriodSelected['weather'][0]['description']}}</h4>
       <div class="propertyContainer">
         <SingleWeatherPropertyBlob
           iconSrc="fas fa-thermometer-three-quarters"
@@ -15,6 +15,7 @@
       <div class="timeButtonWrapper">
         <button
           v-bind:class="{'timePeriodButton': true, 'timePeriodButton-mousedown':isToggleButtonMouseDown, 'timePeriodButton-mouseup':!isToggleButtonMouseDown}"
+          v-bind:style="buttonBackgroundStyle"
           v-on:click="onToggleTimePeriod"
           v-on:mousedown="onToggleTimeMouseDownToggle"
           v-on:mouseup="onToggleTimeMouseDownToggle"
@@ -35,7 +36,7 @@ import {
   TOMORROW_TEXT
 } from "../resources/texts/texts";
 import { getMonthName } from "../utility/months";
-import { UPDATE_ACTIVE_WEATHER } from "../store/mutations";
+import { UPDATE_ACTIVE_WEATHER, UPDATE_COLOR_ACCENT } from "../store/mutations";
 
 export default {
   store,
@@ -50,7 +51,8 @@ export default {
       isToggleButtonMouseDown: false,
       LOADING_TEXT,
       NOW_TEXT,
-      TOMORROW_TEXT
+      TOMORROW_TEXT,
+      colorAccent: "lightblue"
     };
   },
   props: {
@@ -70,7 +72,10 @@ export default {
         this.timePeriod = "current";
         this.weatherAsPerTimePeriodSelected = {
           ...weatherInfo[this.timePeriod],
-          state: this.weatherInfo["state"] === this.weatherInfo["city"]? '' : this.weatherInfo["state"],
+          state:
+            this.weatherInfo["state"] === this.weatherInfo["city"]
+              ? ""
+              : this.weatherInfo["state"],
           country: weatherInfo["country"],
           city: weatherInfo["city"]
         };
@@ -81,7 +86,10 @@ export default {
         this.timePeriodIndex = 0;
         this.weatherAsPerTimePeriodSelected = {
           ...this.weatherInfo[timePeriod],
-          state: this.weatherInfo["state"] === this.weatherInfo["city"]? '' : this.weatherInfo["state"],
+          state:
+            this.weatherInfo["state"] === this.weatherInfo["city"]
+              ? ""
+              : this.weatherInfo["state"],
           country: this.weatherInfo["country"],
           city: this.weatherInfo["city"]
         };
@@ -91,7 +99,10 @@ export default {
           temp: this.weatherInfo[timePeriod][this.timePeriodIndex]["temp"][
             "day"
           ],
-          state: this.weatherInfo["state"] === this.weatherInfo["city"]? '' : this.weatherInfo["state"],
+          state:
+            this.weatherInfo["state"] === this.weatherInfo["city"]
+              ? ""
+              : this.weatherInfo["state"],
           country: this.weatherInfo["country"],
           city: this.weatherInfo["city"]
         };
@@ -104,7 +115,10 @@ export default {
           temp: this.weatherInfo[this.timePeriod][this.timePeriodIndex]["temp"][
             "day"
           ],
-          state: this.weatherInfo["state"] === this.weatherInfo["city"]? '' : this.weatherInfo["state"],
+          state:
+            this.weatherInfo["state"] === this.weatherInfo["city"]
+              ? ""
+              : this.weatherInfo["state"],
           country: this.weatherInfo["country"],
           city: this.weatherInfo["city"]
         };
@@ -148,10 +162,31 @@ export default {
         : new Date(this.weatherAsPerTimePeriodSelected["dt"] * 1000)
             .getDate()
             .toString() + ` ${monthName}`;
+    },
+    boxShadowStyle() {
+      return {
+        boxShadow: `5px 5px ${this.colorAccent}`,
+        border: `1px solid ${this.colorAccent}`
+      };
+    },
+    buttonBackgroundStyle() {
+      return {
+        background: `${this.colorAccent}`
+      };
     }
   },
   created() {
     this.timePeriod = "current";
+  },
+  mounted() {
+    store.subscribe((mutation, state) => {
+      switch (mutation.type) {
+        case UPDATE_COLOR_ACCENT: {
+          this.colorAccent = state.colorAccent;
+          break;
+        }
+      }
+    });
   },
   methods: {
     onToggleTimePeriod: function() {
@@ -177,12 +212,11 @@ export default {
 <style scoped>
 .weatherContainer {
   background: white;
-  border: 1px solid lightblue;
   border-radius: 1rem;
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  box-shadow: 5px 5px lightblue;
+  transition: all 0.3s ease;
 }
 
 .weatherDescription {
@@ -207,7 +241,6 @@ export default {
   min-width: 25%;
   border-radius: 1rem;
   border: none;
-  background: lightblue;
   color: black;
   height: 3rem;
   font-size: 1.5rem;

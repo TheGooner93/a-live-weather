@@ -13,7 +13,7 @@ import {
   ATMOSPHERE,
   DRIZZLE
 } from "../utility/weatherTypes";
-import { UPDATE_ACTIVE_WEATHER } from "../store/mutations";
+import { UPDATE_ACTIVE_WEATHER, UPDATE_COLOR_ACCENT } from "../store/mutations";
 
 const raindropLength = 70;
 const raindropCount = 200;
@@ -460,7 +460,7 @@ export default {
           const cloudsToBeLoaded =
             cloudiness &&
             weatherConditionName !== RAIN &&
-              weatherConditionName !== THUNDERSTORM
+            weatherConditionName !== THUNDERSTORM
               ? Math.ceil((cloudiness * cloudsCount) / 100)
               : cloudsCount;
           for (var p = 0; p < cloudsToBeLoaded; p++) {
@@ -497,6 +497,8 @@ export default {
           const y = innerHeight / 4.6;
           const r = innerHeight / 20;
           const dRayAngle = 180 / Math.PI;
+
+          store.dispatch(UPDATE_COLOR_ACCENT, '#FFE656');
 
           createdSun = new Sun(x, y, r, dRayAngle);
         }
