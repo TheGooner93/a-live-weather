@@ -512,7 +512,7 @@ export default {
             const y = Math.random() * innerHeight;
             const dx = Math.random(); //velocity
             const dy = Math.random() * 2; //velocity
-            const color = "brown";
+            const color = (weatherId === 701 || weatherId === 741) ? "#c3d2e5" : "lightbrown";
 
             const createdParticle = new Particle(x, y, dx, dy, color);
             particleArray.push(createdParticle);
@@ -589,10 +589,14 @@ export default {
 
             break;
           }
-          case ATMOSPHERE: {
-            initParticles();
-            store.dispatch(UPDATE_COLOR_ACCENT, "brown");
-            break;
+        }
+
+        if (/^(7)[0-9]{1,2}$/.test(weatherId)) {
+          initParticles();
+          if(weatherId === 701 || weatherId === 741){
+            store.dispatch(UPDATE_COLOR_ACCENT, "#c3d2e5");
+          }else{
+            store.dispatch(UPDATE_COLOR_ACCENT, "#lightbrown");
           }
         }
         animate();
