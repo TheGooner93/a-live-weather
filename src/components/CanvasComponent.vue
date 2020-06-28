@@ -463,7 +463,6 @@ export default {
             weatherConditionName !== THUNDERSTORM
               ? Math.ceil((cloudiness * cloudsCount) / 100)
               : cloudsCount;
-          store.dispatch(UPDATE_COLOR_ACCENT, "lightblue");
 
           for (var p = 0; p < cloudsToBeLoaded; p++) {
             var x = Math.random() * innerWidth;
@@ -484,8 +483,6 @@ export default {
             var sizeScaler = Math.random() * 1.3;
             var dSnowflake = Math.random() * 10; //velocity
 
-            store.dispatch(UPDATE_COLOR_ACCENT, "lightblue");
-
             const createdSnowflake = new Snowflake(
               x,
               y,
@@ -502,8 +499,6 @@ export default {
           const r = innerHeight / 20;
           const dRayAngle = 180 / Math.PI;
 
-          store.dispatch(UPDATE_COLOR_ACCENT, "#FFE656");
-
           createdSun = new Sun(x, y, r, dRayAngle);
         }
 
@@ -515,8 +510,6 @@ export default {
             const dx = Math.random(); //velocity
             const dy = Math.random() * 2; //velocity
             const color = "brown";
-
-            store.dispatch(UPDATE_COLOR_ACCENT, "brown");
 
             const createdParticle = new Particle(x, y, dx, dy, color);
             particleArray.push(createdParticle);
@@ -557,10 +550,12 @@ export default {
           case RAIN: {
             initClouds();
             initRain();
+            store.dispatch(UPDATE_COLOR_ACCENT, "lightblue");
             break;
           }
           case CLOUDS: {
             initClouds();
+            store.dispatch(UPDATE_COLOR_ACCENT, "lightblue");
             break;
           }
           case CLEAR: {
@@ -568,25 +563,31 @@ export default {
             if (cloudiness) {
               initClouds();
             }
+            store.dispatch(UPDATE_COLOR_ACCENT, "#FFE656");
             break;
           }
           case THUNDERSTORM: {
             initClouds();
             initLightning();
+            store.dispatch(UPDATE_COLOR_ACCENT, "grey");
             break;
           }
           case DRIZZLE: {
             initClouds();
             initRain();
+            store.dispatch(UPDATE_COLOR_ACCENT, "lightblue");
             break;
           }
           case SNOW: {
             initClouds();
             initSnow();
+            store.dispatch(UPDATE_COLOR_ACCENT, "lightblue");
+
             break;
           }
           case ATMOSPHERE: {
             initParticles();
+            store.dispatch(UPDATE_COLOR_ACCENT, "brown");
             break;
           }
         }
