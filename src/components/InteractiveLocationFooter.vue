@@ -153,7 +153,7 @@ export default {
   font-size: 2.5rem;
   text-align: center;
   opacity: 1;
-  transition: all 0.5s ease;
+  transition: all 0.2s linear;
 }
 
 .locationInputWrapper {
