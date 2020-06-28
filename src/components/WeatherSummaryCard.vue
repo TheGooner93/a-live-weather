@@ -72,6 +72,9 @@ export default {
         this.timePeriod = "current";
         this.weatherAsPerTimePeriodSelected = {
           ...weatherInfo[this.timePeriod],
+          rain:
+            this.weatherInfo[this.timePeriod]["rain"] &&
+            this.weatherInfo[this.timePeriod]["rain"]["1h"],
           state:
             this.weatherInfo["state"] === this.weatherInfo["city"]
               ? ""
@@ -86,6 +89,9 @@ export default {
         this.timePeriodIndex = 0;
         this.weatherAsPerTimePeriodSelected = {
           ...this.weatherInfo[timePeriod],
+          rain:
+            this.weatherInfo[timePeriod]["rain"] &&
+            this.weatherInfo[timePeriod]["rain"]["1h"],
           state:
             this.weatherInfo["state"] === this.weatherInfo["city"]
               ? ""
