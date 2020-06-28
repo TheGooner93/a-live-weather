@@ -148,7 +148,7 @@ export default {
 
 .weatherTextWrapper {
   position: relative;
-  top: 5vh;
+  top: 7vh;
   z-index: 4;
   width: 50%;
   transition: all 0.3s ease;

@@ -18,7 +18,7 @@ import { UPDATE_ACTIVE_WEATHER, UPDATE_COLOR_ACCENT } from "../store/mutations";
 const raindropLength = innerWidth < 500 ? 50 : 80;
 const raindropCount = innerWidth < 500 ? 150 : 200;
 const rainAngle = -10;
-const lightningBoltCount = innerWidth < 500 ? 25: 50;
+const lightningBoltCount = innerWidth < 500 ? 25 : 50;
 const cloudsCount = innerWidth < 500 ? 25 : 40;
 const cloudRadius = innerWidth < 500 ? 15 : 20;
 const snowflakeCount = innerWidth < 500 ? 25 : 50;
@@ -52,7 +52,7 @@ export default {
           clouds: cloudiness = 0,
           rain: precipitation = 0,
           weather: {
-            [0]: { main: weatherConditionName = "" }
+            [0]: { main: weatherConditionName = "", id: weatherId }
           }
         } = weatherCondition;
 
@@ -335,7 +335,7 @@ export default {
           draw() {
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
-            ctx.fillStyle = "#FFE656";
+            ctx.fillStyle = "#F9D71C";
             ctx.fill();
             ctx.closePath();
 
@@ -362,7 +362,8 @@ export default {
               );
             }
 
-            ctx.strokeStyle = "#FFE656";
+            // ctx.strokeStyle = "#FFE656";
+            ctx.strokeStyle = "#F9D71C";
             ctx.stroke();
           }
 
@@ -431,6 +432,8 @@ export default {
                   (precipitation * 8 * raindropCount) / 100,
                   raindropCount
                 )
+              : weatherId === 500
+              ? (16 * raindropCount) / 100
               : raindropCount
           );
 
@@ -563,13 +566,14 @@ export default {
             if (cloudiness) {
               initClouds();
             }
-            store.dispatch(UPDATE_COLOR_ACCENT, "#FFE656");
+            // store.dispatch(UPDATE_COLOR_ACCENT, "#FFE656");
+            store.dispatch(UPDATE_COLOR_ACCENT, "#F9D71C");
             break;
           }
           case THUNDERSTORM: {
             initClouds();
             initLightning();
-            store.dispatch(UPDATE_COLOR_ACCENT, "grey");
+            store.dispatch(UPDATE_COLOR_ACCENT, "lightgray");
             break;
           }
           case DRIZZLE: {
