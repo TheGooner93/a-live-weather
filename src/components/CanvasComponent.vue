@@ -10,7 +10,6 @@ import {
   SNOW,
   THUNDERSTORM,
   RAIN,
-  ATMOSPHERE,
   DRIZZLE
 } from "../utility/weatherTypes";
 import { UPDATE_ACTIVE_WEATHER, UPDATE_COLOR_ACCENT } from "../store/mutations";
