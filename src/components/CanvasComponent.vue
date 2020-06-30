@@ -14,17 +14,17 @@ import {
 } from "../utility/weatherTypes";
 import { UPDATE_ACTIVE_WEATHER, UPDATE_COLOR_ACCENT } from "../store/mutations";
 
-const raindropLength = innerWidth < 500 ? 50 : 80;
-const raindropCount = innerWidth < 500 ? 150 : 200;
+const raindropLength = innerWidth < 800 ? 50 : 80;
+const raindropCount = innerWidth < 800 ? 150 : 200;
 const rainAngle = -10;
-const lightningBoltCount = innerWidth < 500 ? 25 : 50;
-const cloudsCount = innerWidth < 500 ? 25 : 40;
-const cloudRadius = innerWidth < 500 ? 15 : 20;
-const snowflakeCount = innerWidth < 500 ? 25 : 50;
+const lightningBoltCount = innerWidth < 800 ? 25 : 50;
+const cloudsCount = innerWidth < 800 ? 25 : 40;
+const cloudRadius = innerWidth < 800 ? 15 : 20;
+const snowflakeCount = innerWidth < 800 ? 25 : 50;
 const snowAngle = -50;
-const snowflakeSize = innerWidth < 500 ? 20 : 30;
+const snowflakeSize = innerWidth < 800 ? 20 : 30;
 const rayCount = 8;
-const particleCount = innerWidth < 500 ? 400 : 700;
+const particleCount = innerWidth < 800 ? 400 : 700;
 const particleRadius = 0.6;
 
 export default {
