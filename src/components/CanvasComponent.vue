@@ -4,7 +4,7 @@
 
 <script>
 import store from "../store/store";
-import {
+import { 
   CLOUDS,
   CLEAR,
   SNOW,

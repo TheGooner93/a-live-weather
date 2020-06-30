@@ -114,10 +114,16 @@ export default {
         };
       } else {
         this.isWeatherLoading = true;
-        this.$getLocation().then(coordinates => {
+        this.$getLocation()
+        .then(coordinates => {
           this.coordinates = coordinates;
           this.isWeatherLoading = false;
-        });
+        })
+        .catch(err => {
+          console.log(err);
+          this.isFooterExpanded = true;
+        })
+        ;
       }
     }
   }
