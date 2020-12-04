@@ -1,18 +1,24 @@
 <template>
   <footer v-on:click.self="onToggleFooter" class="footer">
     <span v-if="!isFooterExpanded">
-      <strong v-on:click.self="onToggleFooter">{{FOOTER_TEXT}}</strong>
+      <strong v-on:click.self="onToggleFooter">{{ FOOTER_TEXT }}</strong>
     </span>
     <div
-      v-bind:class="{'invisibleElement' : !isFooterExpanded, 'closeTextWrapper': isFooterExpanded}"
+      v-bind:class="{
+        invisibleElement: !isFooterExpanded,
+        closeTextWrapper: isFooterExpanded,
+      }"
       v-on:click="onCloseClick"
       v-if="!isLoading"
     >
       <i class="fas fa-times fa-lg"></i>
     </div>
-    <div v-if="isLoading">{{LOADING_TEXT}}</div>
+    <div v-if="isLoading">{{ LOADING_TEXT }}</div>
     <section
-      v-bind:class="{'invisibleElement' : !isFooterExpanded, 'locationInputSection': isFooterExpanded}"
+      v-bind:class="{
+        invisibleElement: !isFooterExpanded,
+        locationInputSection: isFooterExpanded,
+      }"
       v-if="!isLoading"
     >
       <div class="locationInputWrapper">
@@ -23,18 +29,42 @@
         />
       </div>
       <div
-        v-bind:class="{'pt-1 inputSubtextWrapper' : true, 'invisibleElement' : !citySearchText || (citySearchText && isSearchErrorShown)}"
-      >{{PRESS_ENTER_TEXT}}</div>
+        v-bind:class="{
+          'pt-1 inputSubtextWrapper': true,
+          invisibleElement:
+            !citySearchText || (citySearchText && isSearchErrorShown),
+        }"
+      >
+        {{ PRESS_ENTER_TEXT }}
+      </div>
       <div
-        v-bind:class="{'pt-1 inputSubtextWrapper errorText' : true, 'invisibleElement' : !isSearchErrorShown}"
-      >{{UNABLE_TO_FIND_LOCATION_TEXT}}</div>
+        v-bind:class="{
+          'pt-1 inputSubtextWrapper errorText': true,
+          invisibleElement: !isSearchErrorShown,
+        }"
+      >
+        {{ UNABLE_TO_FIND_LOCATION_TEXT }}
+      </div>
       <div class="pt-2">or</div>
       <div class="pt-4">
         <button
-          v-bind:class="{'detectLocationButton': true, 'detectLocationButton-mousedown':isButtonMouseDown, 'detectLocationButton-mouseup':!isButtonMouseDown}"
+          v-bind:class="{
+            detectLocationButton: true,
+            'detectLocationButton-mousedown': isButtonMouseDown,
+            'detectLocationButton-mouseup': !isButtonMouseDown,
+          }"
+          v-bind:disabled="isLocationDisabled"
           v-on:mousedown="onButtonMouseDownToggle"
           v-on:mouseup="onButtonMouseDownToggle"
-        >{{DETECT_LOCATION_TEXT}}</button>
+        >
+          {{ DETECT_LOCATION_TEXT }}
+        </button>
+        <div
+          v-if="isLocationDisabled"
+          v-bind:class="{ 'pt-1 buttonErrorWrapper errorText': true }"
+        >
+          {{ ENABLE_LOCATION_ACCESS }}
+        </div>
       </div>
     </section>
   </footer>
@@ -45,79 +75,96 @@ import {
   FOOTER_TEXT,
   PRESS_ENTER_TEXT,
   DETECT_LOCATION_TEXT,
+  ENABLE_LOCATION_ACCESS,
   FOOTER_INPUT_PLACEHOLDER,
   UNABLE_TO_FIND_LOCATION_TEXT,
-  LOADING_TEXT
+  LOADING_TEXT,
 } from "../resources/texts/texts";
 
 import { getGeocodesForLocation } from "../services/weatherService";
+import { UPDATE_IS_LOADING } from '../store/mutations';
+import store from "../store/store";
 
 export default {
+  store,
   name: "InteractiveLocationFooter",
   data: () => ({
     FOOTER_TEXT,
     PRESS_ENTER_TEXT,
     DETECT_LOCATION_TEXT,
+    ENABLE_LOCATION_ACCESS,
     FOOTER_INPUT_PLACEHOLDER,
     UNABLE_TO_FIND_LOCATION_TEXT,
     LOADING_TEXT,
     citySearchText: "",
-    isLoading: false,
+    isButtonMouseDown: false,
     isSearchErrorShown: false,
-    isButtonMouseDown: false
+    isLoading: store.state.isLoading,
   }),
-  props: ["isFooterExpanded"],
+  props: ["isFooterExpanded", "isLocationDisabled"],
+  mounted: function () {
+    store.subscribe((mutation, state) => {
+      switch (mutation.type) {
+        case UPDATE_IS_LOADING: {
+          this.isLoading = state.isLoading;
+          break;
+        }
+      }
+    });
+  },
   methods: {
-    onButtonMouseDownToggle: function() {
+    onButtonMouseDownToggle: function () {
       if (this.isButtonMouseDown) {
         this.isButtonMouseDown = false;
+        store.dispatch(UPDATE_IS_LOADING, true);
         this.$emit("getCurrentLocation");
-        setTimeout(() => this.$emit("footerToggle"), 100);
+        // setTimeout(() => this.$emit("footerToggle", false), 100);
       } else {
         this.isButtonMouseDown = true;
       }
     },
-    onToggleFooter: function() {
+    onToggleFooter: function () {
       if (!this.isFooterExpanded) {
         this.citySearchText = "";
-        this.$emit("footerToggle");
+        this.$emit("footerToggle", true);
       }
     },
-    onCloseClick: function() {
+    onCloseClick: function () {
       this.citySearchText = "";
-      this.$emit("footerToggle");
+      this.$emit("footerToggle", false);
     },
-    onLocationSearchError: function(err) {
+    onLocationSearchError: function (err) {
       this.isSearchErrorShown = true;
       setTimeout(() => {
         console.log(err);
         this.isSearchErrorShown = false;
       }, 3000);
     },
-    onLocationSearch: function() {
+    onLocationSearch: function () {
       if (this.citySearchText) {
-        this.isLoading = true;
+        // this.isLoading = true;
+        store.dispatch(UPDATE_IS_LOADING, true);
         const geocodePromise = getGeocodesForLocation(this.citySearchText);
         geocodePromise.then(
-          res => {
-            this.isLoading = false;
+          (res) => {
+            // this.isLoading = false;
             const {
-              data: { [0]: { lat = "", lon = "" } = {} }
+              data: { [0]: { lat = "", lon = "" } = {} },
             } = res;
 
             this.citySearchText = "";
 
             this.$emit("updateCoordinates", lat, lon);
-            this.$emit("footerToggle");
+            // this.$emit("footerToggle");
           },
-          err => {
-            this.isLoading = false;
+          (err) => {
+           store.dispatch(UPDATE_IS_LOADING, false);
             this.onLocationSearchError(err);
           }
         );
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -169,6 +216,13 @@ export default {
   transition: all 0.5s ease;
 }
 
+.buttonErrorWrapper {
+  font-size: 1rem;
+  opacity: 1;
+  height: 2rem;
+  transition: all 0.5s ease;
+}
+
 .errorText {
   color: red;
 }
@@ -186,6 +240,12 @@ input {
   text-align: left;
   color: white;
   background: black;
+}
+
+.detectLocationButton:disabled {
+  background: gray;
+  color: lightgray;
+  border: none;
 }
 
 .detectLocationButton:focus {

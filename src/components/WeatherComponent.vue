@@ -1,14 +1,25 @@
 <template>
   <Fragment>
-    <section v-bind:class="{'weatherContentSection' : true}" v-on:click="onWeatherContentClick">
+    <section
+      v-bind:class="{ weatherContentSection: true }"
+      v-on:click="onWeatherContentClick"
+    >
       <section class="canvasSection">
         <div
-          v-bind:class="{'canvasWrapper' : true, 'blurredFooterExpandedWeatherContentSection' : isFooterExpanded,'blurredFooterCollapsedWeatherContentSection' : !isFooterExpanded}"
+          v-bind:class="{
+            canvasWrapper: true,
+            blurredFooterExpandedWeatherContentSection: isFooterExpanded,
+            blurredFooterCollapsedWeatherContentSection: !isFooterExpanded,
+          }"
         >
           <CanvasComponent />
         </div>
         <div
-          v-bind:class="{'weatherTextWrapper' : true, 'weatherTextWrapper-displayed' : !isFooterExpanded, 'weatherTextWrapper-invisible' : isFooterExpanded}"
+          v-bind:class="{
+            weatherTextWrapper: true,
+            'weatherTextWrapper-displayed': !isFooterExpanded,
+            'weatherTextWrapper-invisible': isFooterExpanded,
+          }"
         >
           <WeatherSummaryCard
             v-bind:weatherInfo="weather"
@@ -18,13 +29,18 @@
       </section>
     </section>
     <section
-      v-bind:class="{'footerSection' : true, 'footerCollapsed' : !isFooterExpanded, 'footerExpanded': isFooterExpanded}"
+      v-bind:class="{
+        footerSection: true,
+        footerCollapsed: !isFooterExpanded,
+        footerExpanded: isFooterExpanded,
+      }"
     >
       <InteractiveLocationFooter
         v-on:footerToggle="toggleFooter"
         v-on:updateCoordinates="onLocationCoordinatesUpdate"
         v-on:getCurrentLocation="onGetCurrentLocation"
         v-bind:isFooterExpanded="isFooterExpanded"
+        v-bind:isLocationDisabled="isLocationDisabled"
       />
     </section>
   </Fragment>
@@ -32,6 +48,7 @@
 
 <script>
 import { Fragment } from "vue-fragment";
+import { UPDATE_IS_LOADING } from "../store/mutations";
 import { getWeatherAndLocationDetails } from "../services/weatherService";
 import InteractiveLocationFooter from "./InteractiveLocationFooter";
 import CanvasComponent from "./CanvasComponent";
@@ -45,16 +62,17 @@ export default {
     Fragment,
     InteractiveLocationFooter,
     CanvasComponent,
-    WeatherSummaryCard
+    WeatherSummaryCard,
   },
   data: () => ({
     coordinates: {},
     weather: {},
     isFooterExpanded: false,
-    isWeatherLoading: false
+    isWeatherLoading: false,
+    isLocationDisabled: false,
   }),
   watch: {
-    coordinates: function({ lat = "", lng = "" }) {
+    coordinates: function ({ lat = "", lng = "" }) {
       this.isWeatherLoading = true;
       const unitsSystem = store.state.units.system;
       const weatherPromise = getWeatherAndLocationDetails(
@@ -64,50 +82,48 @@ export default {
       );
 
       weatherPromise
-        .then(weather => {
+        .then((weather) => {
           this.isWeatherLoading = false;
           const {
             [0]: { data: weatherData = {} },
             [1]: {
               data: {
-                address: { country = "", state = "", city = "" }
-              }
-            }
+                address: { country = "", state = "", city = "" },
+              },
+            },
           } = weather;
 
           const weatherWithLocationInfo = {
             ...weatherData,
             country,
             state,
-            city
+            city,
           };
 
           this.weather = weatherWithLocationInfo;
+          store.dispatch(UPDATE_IS_LOADING, false);
+          this.toggleFooter(false);
         })
-        .catch(err => console.log(err));
-    }
+        .catch((err) => console.log(err));
+    },
   },
   created() {
     //Get geolocation
     this.onGetCurrentLocation();
   },
   methods: {
-    toggleFooter() {
-      this.isFooterExpanded =
-        (this.isFooterExpanded && Object.keys(this.weather).length === 0) ||
-        (!this.isFooterExpanded)
-          ? true
-          : false;
+    toggleFooter(status) {
+      this.isFooterExpanded = status;
     },
     onWeatherContentClick() {
       if (this.isFooterExpanded && Object.keys(this.weather).length === 0) {
-        this.toggleFooter();
+        this.toggleFooter(false);
       }
     },
     onLocationCoordinatesUpdate(lat = "", lng = "") {
       this.coordinates = {
         lat,
-        lng
+        lng,
       };
     },
     onGetCurrentLocation() {
@@ -118,18 +134,21 @@ export default {
       //   };
       // } else {
       this.isWeatherLoading = true;
+
       this.$getLocation()
-        .then(coordinates => {
+        .then((coordinates) => {
           this.coordinates = coordinates;
           this.isWeatherLoading = false;
+          this.isLocationDisabled = false;
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           this.isFooterExpanded = true;
+          this.isLocationDisabled = true;
         });
       // }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -190,6 +209,7 @@ export default {
 
 .footerSection:hover {
   box-shadow: 0 -1px 10px lightgrey;
+  cursor: pointer;
 }
 
 .blurredFooterExpandedWeatherContentSection {
@@ -198,10 +218,6 @@ export default {
 
 .blurredFooterCollapsedWeatherContentSection {
   filter: blur(2px);
-}
-
-.footerSection:hover {
-  cursor: pointer;
 }
 
 .footerCollapsed {
