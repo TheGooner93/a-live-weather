@@ -71,6 +71,11 @@ export default {
     isWeatherLoading: false,
     isLocationDisabled: false,
   }),
+  mounted() {
+    this.$gtag.pageview({
+      page_path: "/home",
+    });
+  },
   watch: {
     coordinates: function ({ lat = "", lng = "" }) {
       this.isWeatherLoading = true;

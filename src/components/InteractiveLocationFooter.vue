@@ -82,7 +82,7 @@ import {
 } from "../resources/texts/texts";
 
 import { getGeocodesForLocation } from "../services/weatherService";
-import { UPDATE_IS_LOADING } from '../store/mutations';
+import { UPDATE_IS_LOADING } from "../store/mutations";
 import store from "../store/store";
 
 export default {
@@ -118,7 +118,12 @@ export default {
         this.isButtonMouseDown = false;
         store.dispatch(UPDATE_IS_LOADING, true);
         this.$emit("getCurrentLocation");
-        // setTimeout(() => this.$emit("footerToggle", false), 100);
+
+        //GA
+        this.$gtag.event("Geo_Location", {
+          event_category: "Get_Weather_From_API",
+          event_label: "Geo_Location",
+        });
       } else {
         this.isButtonMouseDown = true;
       }
@@ -142,12 +147,17 @@ export default {
     },
     onLocationSearch: function () {
       if (this.citySearchText) {
-        // this.isLoading = true;
+        //GA
+        this.$gtag.event("Search_Location", {
+          event_category: "Get_Weather_From_API",
+          event_label: "Search_Location",
+          value: this.citySearchText,
+        });
+
         store.dispatch(UPDATE_IS_LOADING, true);
         const geocodePromise = getGeocodesForLocation(this.citySearchText);
         geocodePromise.then(
           (res) => {
-            // this.isLoading = false;
             const {
               data: { [0]: { lat = "", lon = "" } = {} },
             } = res;
@@ -155,10 +165,9 @@ export default {
             this.citySearchText = "";
 
             this.$emit("updateCoordinates", lat, lon);
-            // this.$emit("footerToggle");
           },
           (err) => {
-           store.dispatch(UPDATE_IS_LOADING, false);
+            store.dispatch(UPDATE_IS_LOADING, false);
             this.onLocationSearchError(err);
           }
         );

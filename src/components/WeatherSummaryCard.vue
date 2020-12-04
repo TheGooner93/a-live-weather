@@ -1,28 +1,53 @@
 <template>
   <Fragment>
-    <div v-if="!isWeatherLoading" class="weatherContainer" v-bind:style="boxShadowStyle">
-      <h1>{{weatherAsPerTimePeriodSelected['city']}}</h1>
-      <h3>{{weatherAsPerTimePeriodSelected['state']? weatherAsPerTimePeriodSelected['state'] + ',' : ''}} {{weatherAsPerTimePeriodSelected['country']}}</h3>
-      <h4 class="weatherDescription">{{weatherAsPerTimePeriodSelected['weather'][0]['description']}}</h4>
+    <div
+      v-if="!isWeatherLoading"
+      class="weatherContainer"
+      v-bind:style="boxShadowStyle"
+    >
+      <h1>{{ weatherAsPerTimePeriodSelected["city"] }}</h1>
+      <h3>
+        {{
+          weatherAsPerTimePeriodSelected["state"]
+            ? weatherAsPerTimePeriodSelected["state"] + ","
+            : ""
+        }}
+        {{ weatherAsPerTimePeriodSelected["country"] }}
+      </h3>
+      <h4 class="weatherDescription">
+        {{ weatherAsPerTimePeriodSelected["weather"][0]["description"] }}
+      </h4>
       <div class="propertyContainer">
         <SingleWeatherPropertyBlob
           iconSrc="fas fa-thermometer-three-quarters"
           v-bind:propertyObject="temperature"
         />
-        <SingleWeatherPropertyBlob iconSrc="fas fa-water" v-bind:propertyObject="humidity" />
-        <SingleWeatherPropertyBlob iconSrc="fas fa-wind" v-bind:propertyObject="windSpeed" />
+        <SingleWeatherPropertyBlob
+          iconSrc="fas fa-water"
+          v-bind:propertyObject="humidity"
+        />
+        <SingleWeatherPropertyBlob
+          iconSrc="fas fa-wind"
+          v-bind:propertyObject="windSpeed"
+        />
       </div>
       <div class="timeButtonWrapper">
         <button
-          v-bind:class="{'timePeriodButton': true, 'timePeriodButton-mousedown':isToggleButtonMouseDown, 'timePeriodButton-mouseup':!isToggleButtonMouseDown}"
+          v-bind:class="{
+            timePeriodButton: true,
+            'timePeriodButton-mousedown': isToggleButtonMouseDown,
+            'timePeriodButton-mouseup': !isToggleButtonMouseDown,
+          }"
           v-bind:style="buttonBackgroundStyle"
           v-on:click="onToggleTimePeriod"
           v-on:mousedown="onToggleTimeMouseDownToggle"
           v-on:mouseup="onToggleTimeMouseDownToggle"
-        >{{buttonText}}</button>
+        >
+          {{ buttonText }}
+        </button>
       </div>
     </div>
-    <div v-if="isWeatherLoading">{{LOADING_TEXT}}</div>
+    <div v-if="isWeatherLoading">{{ LOADING_TEXT }}</div>
   </Fragment>
 </template>
 
@@ -33,7 +58,7 @@ import store from "../store/store";
 import {
   LOADING_TEXT,
   NOW_TEXT,
-  TOMORROW_TEXT
+  TOMORROW_TEXT,
 } from "../resources/texts/texts";
 import { getMonthName } from "../utility/months";
 import { UPDATE_ACTIVE_WEATHER, UPDATE_COLOR_ACCENT } from "../store/mutations";
@@ -42,7 +67,7 @@ export default {
   store,
   name: "WeatherSummaryCard",
   components: { SingleWeatherPropertyBlob, Fragment },
-  data: function() {
+  data: function () {
     return {
       timePeriod: "current",
       timePeriodIndex: 0, // showing from the tomorrow onwards
@@ -52,18 +77,18 @@ export default {
       LOADING_TEXT,
       NOW_TEXT,
       TOMORROW_TEXT,
-      colorAccent: "lightblue"
+      colorAccent: "lightblue",
     };
   },
   props: {
     weatherInfo: {
       type: Object,
-      required: true
+      required: true,
     },
     isWeatherLoading: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   watch: {
     weatherInfo: {
@@ -80,11 +105,11 @@ export default {
               ? ""
               : this.weatherInfo["state"],
           country: weatherInfo["country"],
-          city: weatherInfo["city"]
+          city: weatherInfo["city"],
         };
-      }
+      },
     },
-    timePeriod: function(timePeriod) {
+    timePeriod: function (timePeriod) {
       if (timePeriod === "current") {
         this.timePeriodIndex = 0;
         this.weatherAsPerTimePeriodSelected = {
@@ -97,7 +122,7 @@ export default {
               ? ""
               : this.weatherInfo["state"],
           country: this.weatherInfo["country"],
-          city: this.weatherInfo["city"]
+          city: this.weatherInfo["city"],
         };
       } else if (timePeriod === "daily" && this.timePeriodIndex === 0) {
         this.weatherAsPerTimePeriodSelected = {
@@ -110,11 +135,11 @@ export default {
               ? ""
               : this.weatherInfo["state"],
           country: this.weatherInfo["country"],
-          city: this.weatherInfo["city"]
+          city: this.weatherInfo["city"],
         };
       }
     },
-    timePeriodIndex: function(timePeriodIndex) {
+    timePeriodIndex: function (timePeriodIndex) {
       if (this.timePeriod === "daily") {
         this.weatherAsPerTimePeriodSelected = {
           ...this.weatherInfo[this.timePeriod][timePeriodIndex],
@@ -126,7 +151,7 @@ export default {
               ? ""
               : this.weatherInfo["state"],
           country: this.weatherInfo["country"],
-          city: this.weatherInfo["city"]
+          city: this.weatherInfo["city"],
         };
       }
     },
@@ -134,26 +159,26 @@ export default {
       deep: true,
       handler(weatherAsPerTimePeriodSelected) {
         store.dispatch(UPDATE_ACTIVE_WEATHER, weatherAsPerTimePeriodSelected);
-      }
-    }
+      },
+    },
   },
   computed: {
     temperature() {
       return {
         value: this.weatherAsPerTimePeriodSelected["temp"],
-        unit: store.state.units.temperature
+        unit: store.state.units.temperature,
       };
     },
     humidity() {
       return {
         value: this.weatherAsPerTimePeriodSelected["humidity"],
-        unit: store.state.units.humidity
+        unit: store.state.units.humidity,
       };
     },
     windSpeed() {
       return {
         value: this.weatherAsPerTimePeriodSelected["wind_speed"],
-        unit: store.state.units.windSpeed
+        unit: store.state.units.windSpeed,
       };
     },
     buttonText() {
@@ -172,14 +197,14 @@ export default {
     boxShadowStyle() {
       return {
         boxShadow: `5px 5px ${this.colorAccent}`,
-        border: `1px solid ${this.colorAccent}`
+        border: `1px solid ${this.colorAccent}`,
       };
     },
     buttonBackgroundStyle() {
       return {
-        background: `${this.colorAccent}`
+        background: `${this.colorAccent}`,
       };
-    }
+    },
   },
   created() {
     this.timePeriod = "current";
@@ -195,7 +220,13 @@ export default {
     });
   },
   methods: {
-    onToggleTimePeriod: function() {
+    onToggleTimePeriod: function () {
+      //GA
+      this.$gtag.event("Change_Timeperiod", {
+        event_category: "Change_Timeperiod",
+        event_label: "Change_Timeperiod",
+      });
+
       if (this.timePeriod === "current") {
         this.timePeriod = "daily";
         this.timePeriodIndex = 1;
@@ -207,12 +238,12 @@ export default {
         }
       }
     },
-    onToggleTimeMouseDownToggle: function() {
+    onToggleTimeMouseDownToggle: function () {
       this.isToggleButtonMouseDown = this.isToggleButtonMouseDown
         ? false
         : true;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
