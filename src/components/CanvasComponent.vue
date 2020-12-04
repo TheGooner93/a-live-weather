@@ -4,13 +4,22 @@
 
 <script>
 import store from "../store/store";
-import { 
+import {
   CLOUDS,
   CLEAR,
   SNOW,
   THUNDERSTORM,
   RAIN,
-  DRIZZLE
+  DRIZZLE,
+  MIST,
+  HAZE,
+  DUST,
+  FOG,
+  SAND,
+  ASH,
+  SMOKE,
+  SQUALL,
+  TORNADO,
 } from "../utility/weatherTypes";
 import { UPDATE_ACTIVE_WEATHER, UPDATE_COLOR_ACCENT } from "../store/mutations";
 
@@ -31,9 +40,9 @@ export default {
   store,
   name: "CanvasComponent",
   data: () => ({
-    weatherCondition: ""
+    weatherCondition: "",
   }),
-  mounted: function() {
+  mounted: function () {
     store.subscribe((mutation, state) => {
       switch (mutation.type) {
         case UPDATE_ACTIVE_WEATHER: {
@@ -51,8 +60,8 @@ export default {
           clouds: cloudiness = 0,
           rain: precipitation = 0,
           weather: {
-            [0]: { main: weatherConditionName = "", id: weatherId }
-          }
+            [0]: { main: weatherConditionName = "", id: weatherId },
+          },
         } = weatherCondition;
 
         const canvas = this.$refs["canvas"];
@@ -128,7 +137,7 @@ export default {
           draw() {
             ctx.beginPath();
 
-            const getScaledCoordinate = coordinate => {
+            const getScaledCoordinate = (coordinate) => {
               return coordinate * this.size;
             };
 
@@ -504,14 +513,14 @@ export default {
           createdSun = new Sun(x, y, r, dRayAngle);
         }
 
-        function initParticles() {
+        function initParticles(particleColor) {
           particleArray = [];
           for (var p = 0; p < particleCount; p++) {
             const x = Math.random() * innerWidth;
             const y = Math.random() * innerHeight;
             const dx = Math.random(); //velocity
             const dy = Math.random() * 2; //velocity
-            const color = (weatherId === 701 || weatherId === 741) ? "#c3d2e5" : "lightbrown";
+            const color = particleColor;
 
             const createdParticle = new Particle(x, y, dx, dy, color);
             particleArray.push(createdParticle);
@@ -588,20 +597,39 @@ export default {
 
             break;
           }
-        }
+          case SMOKE:
+          case DUST:
+          case SAND:
+          case ASH:
+          case SQUALL:
+          case TORNADO: {
+            initParticles("#b5651d");
+            store.dispatch(UPDATE_COLOR_ACCENT, "#b5651d");
 
-        if (/^(7)[0-9]{1,2}$/.test(weatherId)) {
-          initParticles();
-          if(weatherId === 701 || weatherId === 741){
+            break;
+          }
+          case MIST:
+          case HAZE:
+          case FOG: {
+            initParticles("#c3d2e5");
             store.dispatch(UPDATE_COLOR_ACCENT, "#c3d2e5");
-          }else{
-            store.dispatch(UPDATE_COLOR_ACCENT, "#lightbrown");
+
+            break;
           }
         }
+
+        // if (/^(7)[0-9]{1,2}$/.test(weatherId)) {
+        //   initParticles();
+        //   if(weatherId === 701 || weatherId === 741 || weatherId === 711){
+        //     store.dispatch(UPDATE_COLOR_ACCENT, "#c3d2e5");
+        //   }else{
+        //     store.dispatch(UPDATE_COLOR_ACCENT, "lightbrown");
+        //   }
+        // }
         animate();
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 

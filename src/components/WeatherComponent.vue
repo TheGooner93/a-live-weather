@@ -85,7 +85,7 @@ export default {
           this.weather = weatherWithLocationInfo;
         })
         .catch(err => console.log(err));
-    },
+    }
   },
   created() {
     //Get geolocation
@@ -93,10 +93,14 @@ export default {
   },
   methods: {
     toggleFooter() {
-      this.isFooterExpanded = !this.isFooterExpanded;
+      this.isFooterExpanded =
+        (this.isFooterExpanded && Object.keys(this.weather).length === 0) ||
+        (!this.isFooterExpanded)
+          ? true
+          : false;
     },
     onWeatherContentClick() {
-      if (this.isFooterExpanded) {
+      if (this.isFooterExpanded && Object.keys(this.weather).length === 0) {
         this.toggleFooter();
       }
     },
@@ -107,14 +111,14 @@ export default {
       };
     },
     onGetCurrentLocation() {
-      if (window.location.hostname.includes("localhost")) {
-        this.coordinates = {
-          lat: "25.204",
-          lng: "55.27"
-        };
-      } else {
-        this.isWeatherLoading = true;
-        this.$getLocation()
+      // if (window.location.hostname.includes("localhost")) {
+      //   this.coordinates = {
+      //     lat: "25.204",
+      //     lng: "55.27"
+      //   };
+      // } else {
+      this.isWeatherLoading = true;
+      this.$getLocation()
         .then(coordinates => {
           this.coordinates = coordinates;
           this.isWeatherLoading = false;
@@ -122,9 +126,8 @@ export default {
         .catch(err => {
           console.log(err);
           this.isFooterExpanded = true;
-        })
-        ;
-      }
+        });
+      // }
     }
   }
 };
