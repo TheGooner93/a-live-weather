@@ -4,6 +4,12 @@
       v-bind:class="{ weatherContentSection: true }"
       v-on:click="onWeatherContentClick"
     >
+      <section class="py-3 px-2 ghSection" v-if="!isFooterExpanded">
+        <span class="ghIconStyle" v-on:click="onInfoButtonClick">
+          <i class="fa fa-info-circle" />
+        </span>
+      </section>
+
       <section class="canvasSection">
         <div
           v-bind:class="{
@@ -48,7 +54,7 @@
 
 <script>
 import { Fragment } from "vue-fragment";
-import { UPDATE_IS_LOADING } from "../store/mutations";
+import { UPDATE_IS_LOADING, TOGGLE_DEV_INFO } from "../store/mutations";
 import { getWeatherAndLocationDetails } from "../services/weatherService";
 import InteractiveLocationFooter from "./InteractiveLocationFooter";
 import CanvasComponent from "./CanvasComponent";
@@ -153,6 +159,9 @@ export default {
         });
       // }
     },
+    onInfoButtonClick() {
+      //  store.dispatch(TOGGLE_DEV_INFO);
+    }
   },
 };
 </script>
@@ -236,6 +245,42 @@ export default {
   cursor: none;
   background: transparent;
   padding: 1rem;
+}
+
+.ghSection {
+  background: state.colorAccent;
+  width: 100%;
+  position: fixed;
+  bottom: 10vh;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 5vh;
+  z-index: 1000;
+}
+
+.ghIconStyle {
+  background: white;
+  border: 1px solid lightgrey;
+  border-radius: 1rem;
+  padding: 2px;
+  height: 2rem;
+  width: 3rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.ghIconStyle-mousedown {
+  transform: scale(0.5);
+}
+
+.ghIconStyle-mouseup {
+  transform: scale(1);
+}
+
+.ghIconStyle:hover {
+  transition: all 0.3s ease;
+  box-shadow: 5px 5px black;
 }
 
 @media (max-width: 720px) {

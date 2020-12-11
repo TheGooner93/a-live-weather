@@ -1,7 +1,7 @@
 <template>
   <Fragment>
     <div
-      v-if="!isWeatherLoading"
+      v-if="(!isWeatherLoading && !isDevInfoShown)"
       class="weatherContainer"
       v-bind:style="boxShadowStyle"
     >
@@ -61,7 +61,7 @@ import {
   TOMORROW_TEXT,
 } from "../resources/texts/texts";
 import { getMonthName } from "../utility/months";
-import { UPDATE_ACTIVE_WEATHER, UPDATE_COLOR_ACCENT } from "../store/mutations";
+import { UPDATE_ACTIVE_WEATHER, UPDATE_COLOR_ACCENT, TOGGLE_DEV_INFO } from "../store/mutations";
 
 export default {
   store,
@@ -78,6 +78,7 @@ export default {
       NOW_TEXT,
       TOMORROW_TEXT,
       colorAccent: "lightblue",
+      isDevInfoShown : false,
     };
   },
   props: {
@@ -214,6 +215,10 @@ export default {
       switch (mutation.type) {
         case UPDATE_COLOR_ACCENT: {
           this.colorAccent = state.colorAccent;
+          break;
+        }
+        case TOGGLE_DEV_INFO: {
+          this.isDevInfoShown = state.isDevInfoShown;
           break;
         }
       }

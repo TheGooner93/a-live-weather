@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import { TOGGLE_UNITS_SYSTEM, UPDATE_ACTIVE_WEATHER, UPDATE_COLOR_ACCENT, UPDATE_IS_LOADING } from './mutations';
+import { TOGGLE_UNITS_SYSTEM, UPDATE_ACTIVE_WEATHER, UPDATE_COLOR_ACCENT, UPDATE_IS_LOADING, TOGGLE_DEV_INFO } from './mutations';
 
 Vue.use(Vuex)
 
@@ -16,6 +16,7 @@ const store = new Vuex.Store({
     activeWeather: {},
     colorAccent : '',
     isLoading: false,
+    isDevInfoShown: false
   },
   mutations: {
     [TOGGLE_UNITS_SYSTEM](state) {
@@ -35,6 +36,9 @@ const store = new Vuex.Store({
     },
     [UPDATE_IS_LOADING](state, payload) {
       state.isLoading = payload;
+    },
+    [TOGGLE_DEV_INFO](state) {
+      state.isDevInfoShown = !state.isDevInfoShown;
     }
   },
   actions : {
@@ -49,6 +53,9 @@ const store = new Vuex.Store({
     },
     updateIsLoading({commit}, payload){
       commit(UPDATE_IS_LOADING, payload);
+    },
+    toggleIsDevInfoShown({commit}){
+      commit(TOGGLE_DEV_INFO);
     },
   }
 });
