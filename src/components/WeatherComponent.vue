@@ -103,7 +103,7 @@ export default {
         lng,
         unitsSystem
       );
-      //
+      
       weatherPromise
         .then((weather) => {
           this.isWeatherLoading = false;
