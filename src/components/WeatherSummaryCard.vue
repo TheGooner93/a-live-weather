@@ -1,7 +1,7 @@
 <template>
   <Fragment>
     <div
-      v-if="(!isWeatherLoading && !isDevInfoShown)"
+      v-if="!isWeatherLoading && !isDevInfoShown"
       class="weatherContainer"
       v-bind:style="boxShadowStyle"
     >
@@ -35,17 +35,20 @@
         <button
           v-bind:class="{
             timePeriodButton: true,
-            'timePeriodButton-mousedown': isToggleButtonMouseDown,
-            'timePeriodButton-mouseup': !isToggleButtonMouseDown,
           }"
           v-bind:style="buttonBackgroundStyle"
           v-on:click="onToggleTimePeriod"
-          v-on:mousedown="onToggleTimeMouseDownToggle"
-          v-on:mouseup="onToggleTimeMouseDownToggle"
         >
           {{ buttonText }}
         </button>
       </div>
+    </div>
+    <div
+      v-if="!isWeatherLoading && isDevInfoShown"
+      class="weatherContainer"
+      v-bind:style="boxShadowStyle"
+    >
+      <ProfileCard />
     </div>
     <div v-if="isWeatherLoading">{{ LOADING_TEXT }}</div>
   </Fragment>
@@ -54,6 +57,7 @@
 <script>
 import { Fragment } from "vue-fragment";
 import SingleWeatherPropertyBlob from "./SingleWeatherPropertyBlob";
+import ProfileCard from "./ProfileCard";
 import store from "../store/store";
 import {
   LOADING_TEXT,
@@ -61,24 +65,27 @@ import {
   TOMORROW_TEXT,
 } from "../resources/texts/texts";
 import { getMonthName } from "../utility/months";
-import { UPDATE_ACTIVE_WEATHER, UPDATE_COLOR_ACCENT, TOGGLE_DEV_INFO } from "../store/mutations";
+import {
+  UPDATE_ACTIVE_WEATHER,
+  UPDATE_COLOR_ACCENT,
+  TOGGLE_DEV_INFO,
+} from "../store/mutations";
 
 export default {
   store,
   name: "WeatherSummaryCard",
-  components: { SingleWeatherPropertyBlob, Fragment },
+  components: { SingleWeatherPropertyBlob, Fragment, ProfileCard },
   data: function () {
     return {
       timePeriod: "current",
       timePeriodIndex: 0, // showing from the tomorrow onwards
       weather: {},
       weatherAsPerTimePeriodSelected: {},
-      isToggleButtonMouseDown: false,
       LOADING_TEXT,
       NOW_TEXT,
       TOMORROW_TEXT,
       colorAccent: "lightblue",
-      isDevInfoShown : false,
+      isDevInfoShown: false,
     };
   },
   props: {
@@ -243,11 +250,6 @@ export default {
         }
       }
     },
-    onToggleTimeMouseDownToggle: function () {
-      this.isToggleButtonMouseDown = this.isToggleButtonMouseDown
-        ? false
-        : true;
-    },
   },
 };
 </script>
@@ -290,12 +292,8 @@ export default {
   transition: all 0.3s ease;
 }
 
-.timePeriodButton-mousedown {
+.timePeriodButton:active {
   transform: scale(0.9);
-}
-
-.timePeriodButton-mouseup {
-  transform: scale(1);
 }
 
 .timePeriodButton:hover {

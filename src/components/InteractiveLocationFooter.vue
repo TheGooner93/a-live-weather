@@ -50,8 +50,6 @@
         <button
           v-bind:class="{
             detectLocationButton: true,
-            'detectLocationButton-mousedown': isButtonMouseDown,
-            'detectLocationButton-mouseup': !isButtonMouseDown,
           }"
           v-bind:disabled="isLocationDisabled"
           v-on:mousedown="onButtonMouseDownToggle"
@@ -249,6 +247,7 @@ input {
   text-align: left;
   color: white;
   background: black;
+  transition: all 0.3s ease;
 }
 
 .detectLocationButton:disabled {
@@ -261,12 +260,13 @@ input {
   outline: none;
 }
 
-.detectLocationButton-mousedown {
+.detectLocationButton:active {
   transform: scale(0.9);
 }
 
-.detectLocationButton-mouseup {
-  transform: scale(1);
+.detectLocationButton:hover {
+  transition: all 0.3s ease;
+  box-shadow: 5px 5px lightblue;
 }
 
 .invisibleElement {

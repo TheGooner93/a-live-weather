@@ -4,10 +4,11 @@
       v-bind:class="{ weatherContentSection: true }"
       v-on:click="onWeatherContentClick"
     >
-      <section class="py-3 px-2 ghSection" v-if="!isFooterExpanded">
-        <span class="ghIconStyle" v-on:click="onInfoButtonClick">
-          <i class="fa fa-info-circle" />
-        </span>
+      <section class="py-3 px-2 ghSection" v-if="!isFooterExpanded && !isWeatherLoading">
+        <CustomButton
+          faClass='fa fa-info-circle'
+          v-on:onClickCallback="onInfoButtonClick"
+        />
       </section>
 
       <section class="canvasSection">
@@ -59,6 +60,7 @@ import { getWeatherAndLocationDetails } from "../services/weatherService";
 import InteractiveLocationFooter from "./InteractiveLocationFooter";
 import CanvasComponent from "./CanvasComponent";
 import WeatherSummaryCard from "./WeatherSummaryCard";
+import CustomButton from "./common/CustomButton";
 import store from "../store/store";
 
 export default {
@@ -69,6 +71,7 @@ export default {
     InteractiveLocationFooter,
     CanvasComponent,
     WeatherSummaryCard,
+    CustomButton,
   },
   data: () => ({
     coordinates: {},
@@ -76,8 +79,17 @@ export default {
     isFooterExpanded: false,
     isWeatherLoading: false,
     isLocationDisabled: false,
+    isDevInfoShown: false,
   }),
   mounted() {
+    store.subscribe((mutation, state) => {
+      switch (mutation.type) {
+        case TOGGLE_DEV_INFO: {
+          this.isDevInfoShown = state.isDevInfoShown;
+          break;
+        }
+      }
+    });
     this.$gtag.pageview({
       page_path: "/home",
     });
@@ -160,8 +172,8 @@ export default {
       // }
     },
     onInfoButtonClick() {
-      //  store.dispatch(TOGGLE_DEV_INFO);
-    }
+      store.dispatch(TOGGLE_DEV_INFO);
+    },
   },
 };
 </script>
@@ -257,30 +269,6 @@ export default {
   align-items: center;
   height: 5vh;
   z-index: 1000;
-}
-
-.ghIconStyle {
-  background: white;
-  border: 1px solid lightgrey;
-  border-radius: 1rem;
-  padding: 2px;
-  height: 2rem;
-  width: 3rem;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.ghIconStyle-mousedown {
-  transform: scale(0.5);
-}
-
-.ghIconStyle-mouseup {
-  transform: scale(1);
-}
-
-.ghIconStyle:hover {
-  transition: all 0.3s ease;
-  box-shadow: 5px 5px black;
 }
 
 @media (max-width: 720px) {
