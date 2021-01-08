@@ -13,7 +13,9 @@
     >
       <i class="fas fa-times fa-lg"></i>
     </div>
-    <div v-if="isLoading">{{ LOADING_TEXT }}</div>
+    <div v-if="isLoading">
+      <WeatherLoading :noBorder="true"/>
+    </div>
     <section
       v-bind:class="{
         invisibleElement: !isFooterExpanded,
@@ -76,16 +78,17 @@ import {
   ENABLE_LOCATION_ACCESS,
   FOOTER_INPUT_PLACEHOLDER,
   UNABLE_TO_FIND_LOCATION_TEXT,
-  LOADING_TEXT,
 } from "../resources/texts/texts";
 
 import { getGeocodesForLocation } from "../services/weatherService";
 import { UPDATE_IS_LOADING } from "../store/mutations";
+import WeatherLoading from "./common/WeatherLoading";
 import store from "../store/store";
 
 export default {
   store,
   name: "InteractiveLocationFooter",
+  components: { WeatherLoading },
   data: () => ({
     FOOTER_TEXT,
     PRESS_ENTER_TEXT,
@@ -93,7 +96,6 @@ export default {
     ENABLE_LOCATION_ACCESS,
     FOOTER_INPUT_PLACEHOLDER,
     UNABLE_TO_FIND_LOCATION_TEXT,
-    LOADING_TEXT,
     citySearchText: "",
     isButtonMouseDown: false,
     isSearchErrorShown: false,

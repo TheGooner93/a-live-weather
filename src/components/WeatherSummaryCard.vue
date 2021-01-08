@@ -50,17 +50,19 @@
     >
       <ProfileCard />
     </div>
-    <div v-if="isWeatherLoading">{{ LOADING_TEXT }}</div>
+    <div v-if="isWeatherLoading">
+      <WeatherLoading />
+    </div>
   </Fragment>
 </template>
 
 <script>
 import { Fragment } from "vue-fragment";
 import SingleWeatherPropertyBlob from "./SingleWeatherPropertyBlob";
+import WeatherLoading from "./common/WeatherLoading";
 import ProfileCard from "./ProfileCard";
 import store from "../store/store";
 import {
-  LOADING_TEXT,
   NOW_TEXT,
   TOMORROW_TEXT,
 } from "../resources/texts/texts";
@@ -74,14 +76,18 @@ import {
 export default {
   store,
   name: "WeatherSummaryCard",
-  components: { SingleWeatherPropertyBlob, Fragment, ProfileCard },
+  components: {
+    SingleWeatherPropertyBlob,
+    Fragment,
+    ProfileCard,
+    WeatherLoading
+  },
   data: function () {
     return {
       timePeriod: "current",
       timePeriodIndex: 0, // showing from the tomorrow onwards
       weather: {},
       weatherAsPerTimePeriodSelected: {},
-      LOADING_TEXT,
       NOW_TEXT,
       TOMORROW_TEXT,
       colorAccent: "lightblue",
